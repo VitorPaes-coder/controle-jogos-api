@@ -15,17 +15,8 @@ const prisma = new PrismaClient()
 const insertPlataforma = async function (plataforma) {
     try {
 
-        let sql = `insert into tbl_plataforma (
+        let sql = `insert into tbl_plataforma (nome) values ('${plataforma.nome}')`
 
-                                        nome, 
-                                        descricao
-
-                                        ) values (
-
-                                            '${plataforma.nome}', 
-                                            '${plataforma.descricao}'
-
-                                        )`
         // Executa o script SQL no banco de dados e aguarda o retorno do banco de dados
         let result = await prisma.$executeRawUnsafe(sql)
 
@@ -44,10 +35,9 @@ const insertPlataforma = async function (plataforma) {
 const updatePlataforma = async function (plataforma) {
     try {
 
-        let SQL = `update tbl_plataforma set    nome        = '${plataforma.nome}', 
-                                                descricao   = '${plataforma.descricao}'
+        let SQL = `update tbl_plataforma set nome = '${plataforma.nome}'
 
-                    where id = ${plataforma.id}`
+                    where id_plataforma = ${plataforma.id}`
 
         //execute é usado quado não é necessário retornar nada ao dados do banco
         let result = await prisma.$executeRawUnsafe(SQL)
@@ -67,7 +57,7 @@ const updatePlataforma = async function (plataforma) {
 // Função para deletar uma plataforma existente no banco de dados
 const deletePlataforma = async function (id) {
     try {
-        let sql = `delete from tbl_plataforma where id = ${id}`
+        let sql = `delete from tbl_plataforma where id_plataforma = ${id}`
 
         let result = await prisma.$executeRawUnsafe(sql)
 
@@ -86,7 +76,7 @@ const selectAllPlataforma = async function () {
     try {
 
         //script SQL para retornar os dados do banco do banco
-        let sql = `select * from tbl_plataforma order by id desc`
+        let sql = `select * from tbl_plataforma order by id_plataforma desc`
 
         // Executa o script SQL no banco de dados e aguarda o retorno do banco de dados
         let result = await prisma.$queryRawUnsafe(sql)
@@ -104,7 +94,7 @@ const selectAllPlataforma = async function () {
 // Função para buscar no banco de dados um plataforma pelo id
 const selectByIdPlataforma = async function (id) {
     try {
-        let sql = `select * from tbl_plataforma where id = ${id}`
+        let sql = `select * from tbl_plataforma where id_plataforma = ${id}`
 
         let result = await prisma.$queryRawUnsafe(sql)
 

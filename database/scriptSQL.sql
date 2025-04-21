@@ -24,7 +24,7 @@ create table tbl_plataforma (
 create table tbl_desenvolvedora (
     id_desenvolvedora int primary key not null auto_increment,
     nome varchar(100) unique not null,
-    descricao text null
+    descricao text null   
 );
 
 create table tbl_sexo (
