@@ -22,29 +22,33 @@
  * *****************************************************************************************************/
 
 // Importando as bibliotecas
-const express = require('express');
-const cors = require('cors');   
-const bodyParser = require('body-parser');
+const express = require('express')
+const cors = require('cors')   
+const bodyParser = require('body-parser')
 
 // Importando das controllers para realizar o CRUD de dados
-const controllerJogo = require('./controller/jogo/controllerJogo.js');
-const controllerGenero = require('./controller/genero/controllerGenero.js');
-const controllerDesenvolvedora = require('./controller/desenvolvedora/controllerDesenvolvedora.js');
+const controllerJogo = require('./controller/jogo/controllerJogo.js')
+const controllerGenero = require('./controller/genero/controllerGenero.js')
+const controllerDesenvolvedora = require('./controller/desenvolvedora/controllerDesenvolvedora.js')
+const controllerPlataforma = require('./controller/plataforma/controllerPlataforma.js')
+const controllerPontuacao = require('./controller/pontuacao/controllerPontuacao.js')
+const controllerSexo = require('./controller/sexo/controllerSexo.js')
+const controllerPais = require('./controller/pais/controllerPais.js')
 
 // Estabelecendo o formato de dados que deverá chegar no body da requisição(POST ou PUT)
-const bodyParserJSON = bodyParser.json();
+const bodyParserJSON = bodyParser.json()
 
 // Cria o objeto app para criar a API
-const app = express();
+const app = express()
 
 // Configuração do cors
 app.use((request, response, next) => {
-    response.header('Access-Control-Allow-Origin', '*');
-    response.header('Access-Control-Allow-Headers', 'GET, POST, PUT, DELETE, OPTIONS');
+    response.header('Access-Control-Allow-Origin', '*')
+    response.header('Access-Control-Allow-Headers', 'GET, POST, PUT, DELETE, OPTIONS')
 
     app.use(cors())
     next()
-});
+})
 
 /*************************************JOGO********************************************/
 
@@ -235,6 +239,266 @@ app.put('/v1/controle-jogos/desenvolvedora/:id', cors(), bodyParserJSON, async f
 
     response.status(resultDesenvolvedora.status_code)
     response.json(resultDesenvolvedora)
+})
+
+/*************************************PLATAFORMA********************************************/
+
+// Endpoint para inserir uma nova plataforma no banco de dados
+app.post('/v1/controle-jogos/plataforma', cors(), bodyParserJSON, async function (request, response) {
+    
+    // Recebe o content type para validar o tipo de dados da requisição
+    let contentType = request.headers['content-type']
+    
+    // Recebe o conteúdo do body da requisição
+    let dadosBody = request.body
+
+    // Encaminha os dados da nova plataforma para a controller inserir no banco de dados
+    let resultPlataforma = await controllerPlataforma.inserirPlataforma(dadosBody, contentType)
+
+    response.status(resultPlataforma.status_code)
+    response.json(resultPlataforma)   
+}) 
+
+// Endpoint para retornar uma lista de plataformas
+app.get('/v1/controle-jogos/plataforma', cors(), async function (request, response) {
+    // Chama a função para listar as plataformas
+    let resultPlataforma = await controllerPlataforma.listarPlataforma()
+
+    response.status(resultPlataforma.status_code)
+    response.json(resultPlataforma)
+})
+
+// Endpoint para retornar uma plataforma específica
+app.get('/v1/controle-jogos/plataforma/:id', cors(), async function (request, response) {
+    let idPlataforma = request.params.id
+    // Chama a função para buscar a plataforma
+    let resultPlataforma = await controllerPlataforma.buscarPlataforma(idPlataforma)
+
+    response.status(resultPlataforma.status_code)
+    response.json(resultPlataforma)
+})
+
+// Endpoint para excluir uma plataforma
+app.delete('/v1/controle-jogos/plataforma/:id', cors(), async function (request, response) {
+    let idPlataforma = request.params.id
+    // Chama a função para excluir a plataforma
+    let resultPlataforma = await controllerPlataforma.excluirPlataforma(idPlataforma)
+
+    response.status(resultPlataforma.status_code)
+    response.json(resultPlataforma)
+})
+
+// Endpoint para atualizar uma plataforma
+app.put('/v1/controle-jogos/plataforma/:id', cors(), bodyParserJSON, async function (request, response) {
+    // Recebe o content type para validar o tipo de dados da requisição
+    let contentType = request.headers['content-type']
+
+    // Recebe o id da plataforma
+    let idPlataforma = request.params.id
+    
+    // Recebe os dados da plataforma encaminhados no body da requisição
+    let dadosBody = request.body
+
+    // Chama a função para atualizar a plataforma
+    let resultPlataforma = await controllerPlataforma.atualizarPlataforma(dadosBody, idPlataforma, contentType)
+
+    response.status(resultPlataforma.status_code)
+    response.json(resultPlataforma)
+})
+
+/*************************************PONTUACAO********************************************/
+
+// Endpoint para inserir uma nova pontuação no banco de dados
+app.post('/v1/controle-jogos/pontuacao', cors(), bodyParserJSON, async function (request, response) {
+    
+    // Recebe o content type para validar o tipo de dados da requisição
+    let contentType = request.headers['content-type']
+    
+    // Recebe o conteúdo do body da requisição
+    let dadosBody = request.body
+
+    // Encaminha os dados da nova pontuação para a controller inserir no banco de dados
+    let resultPontuacao = await controllerPontuacao.inserirPontuacao(dadosBody, contentType)
+
+    response.status(resultPontuacao.status_code)
+    response.json(resultPontuacao)   
+}) 
+
+// Endpoint para retornar uma lista de pontuações
+app.get('/v1/controle-jogos/pontuacao', cors(), async function (request, response) {
+    // Chama a função para listar as pontuações
+    let resultPontuacao = await controllerPontuacao.listarPontuacao()
+
+    response.status(resultPontuacao.status_code)
+    response.json(resultPontuacao)
+})
+
+// Endpoint para retornar uma pontuação específica
+app.get('/v1/controle-jogos/pontuacao/:id', cors(), async function (request, response) {
+    let idPontuacao = request.params.id
+    // Chama a função para buscar a pontuação
+    let resultPontuacao = await controllerPontuacao.buscarPontuacao(idPontuacao)
+
+    response.status(resultPontuacao.status_code)
+    response.json(resultPontuacao)
+})
+
+// Endpoint para excluir uma pontuação
+app.delete('/v1/controle-jogos/pontuacao/:id', cors(), async function (request, response) {
+    let idPontuacao = request.params.id
+    // Chama a função para excluir a pontuação
+    let resultPontuacao = await controllerPontuacao.excluirPontuacao(idPontuacao)
+
+    response.status(resultPontuacao.status_code)
+    response.json(resultPontuacao)
+})
+
+// Endpoint para atualizar uma pontuação
+app.put('/v1/controle-jogos/pontuacao/:id', cors(), bodyParserJSON, async function (request, response) {
+    // Recebe o content type para validar o tipo de dados da requisição
+    let contentType = request.headers['content-type']
+
+    // Recebe o id da pontuação
+    let idPontuacao = request.params.id
+    
+    // Recebe os dados da pontuação encaminhados no body da requisição
+    let dadosBody = request.body
+
+    // Chama a função para atualizar a pontuação
+    let resultPontuacao = await controllerPontuacao.atualizarPontuacao(dadosBody, idPontuacao, contentType)
+
+    response.status(resultPontuacao.status_code)
+    response.json(resultPontuacao)
+})
+
+/*************************************PONTUACAO********************************************/
+
+// Endpoint para inserir um novo sexo no banco de dados
+app.post('/v1/controle-jogos/sexo', cors(), bodyParserJSON, async function (request, response) {
+    
+    // Recebe o content type para validar o tipo de dados da requisição
+    let contentType = request.headers['content-type']
+    
+    // Recebe o conteúdo do body da requisição
+    let dadosBody = request.body
+
+    // Encaminha os dados do novo sexo para a controller inserir no banco de dados
+    let resultSexo = await controllerSexo.inserirSexo(dadosBody, contentType)
+
+    response.status(resultSexo.status_code)
+    response.json(resultSexo)   
+}) 
+
+// Endpoint para retornar uma lista de sexos
+app.get('/v1/controle-jogos/sexo', cors(), async function (request, response) {
+    // Chama a função para listar os sexos
+    let resultSexo = await controllerSexo.listarSexo()
+
+    response.status(resultSexo.status_code)
+    response.json(resultSexo)
+})
+
+// Endpoint para retornar um sexo específico
+app.get('/v1/controle-jogos/sexo/:id', cors(), async function (request, response) {
+    let idSexo = request.params.id
+    // Chama a função para buscar o sexo
+    let resultSexo = await controllerSexo.buscarSexo(idSexo)
+
+    response.status(resultSexo.status_code)
+    response.json(resultSexo)
+})
+
+// Endpoint para excluir um sexo
+app.delete('/v1/controle-jogos/sexo/:id', cors(), async function (request, response) {
+    let idSexo = request.params.id
+    // Chama a função para excluir o sexo
+    let resultSexo = await controllerSexo.excluirSexo(idSexo)
+
+    response.status(resultSexo.status_code)
+    response.json(resultSexo)
+})
+
+// Endpoint para atualizar um sexo
+app.put('/v1/controle-jogos/sexo/:id', cors(), bodyParserJSON, async function (request, response) {
+    // Recebe o content type para validar o tipo de dados da requisição
+    let contentType = request.headers['content-type']
+
+    // Recebe o id do sexo
+    let idSexo = request.params.id
+    
+    // Recebe os dados do sexo encaminhados no body da requisição
+    let dadosBody = request.body
+
+    // Chama a função para atualizar o sexo
+    let resultSexo = await controllerSexo.atualizarSexo(dadosBody, idSexo, contentType)
+
+    response.status(resultSexo.status_code)
+    response.json(resultSexo)
+})
+
+/*************************************PAIS********************************************/
+
+// Endpoint para inserir um novo país no banco de dados
+app.post('/v1/controle-jogos/pais', cors(), bodyParserJSON, async function (request, response) {
+    
+    // Recebe o content type para validar o tipo de dados da requisição
+    let contentType = request.headers['content-type']
+    
+    // Recebe o conteúdo do body da requisição
+    let dadosBody = request.body
+
+    // Encaminha os dados do novo país para a controller inserir no banco de dados
+    let resultPais = await controllerPais.inserirPais(dadosBody, contentType)
+
+    response.status(resultPais.status_code)
+    response.json(resultPais)   
+}) 
+
+// Endpoint para retornar uma lista de países
+app.get('/v1/controle-jogos/pais', cors(), async function (request, response) {
+    // Chama a função para listar os países
+    let resultPais = await controllerPais.listarPais()
+
+    response.status(resultPais.status_code)
+    response.json(resultPais)
+})
+
+// Endpoint para retornar um país específico
+app.get('/v1/controle-jogos/pais/:id', cors(), async function (request, response) {
+    let idPais = request.params.id
+    // Chama a função para buscar o país
+    let resultPais = await controllerPais.buscarPais(idPais)
+
+    response.status(resultPais.status_code)
+    response.json(resultPais)
+})
+
+// Endpoint para excluir um país
+app.delete('/v1/controle-jogos/pais/:id', cors(), async function (request, response) {
+    let idPais = request.params.id
+    // Chama a função para excluir o país
+    let resultPais = await controllerPais.excluirPais(idPais)
+
+    response.status(resultPais.status_code)
+    response.json(resultPais)
+})
+
+// Endpoint para atualizar um país
+app.put('/v1/controle-jogos/pais/:id', cors(), bodyParserJSON, async function (request, response) {
+    // Recebe o content type para validar o tipo de dados da requisição
+    let contentType = request.headers['content-type']
+
+    // Recebe o id do país
+    let idPais = request.params.id
+    
+    // Recebe os dados do país encaminhados no body da requisição
+    let dadosBody = request.body
+
+    // Chama a função para atualizar o país
+    let resultPais = await controllerPais.atualizarPais(dadosBody, idPais, contentType)
+
+    response.status(resultPais.status_code)
+    response.json(resultPais)
 })
 
 /*********************************************************************************/
