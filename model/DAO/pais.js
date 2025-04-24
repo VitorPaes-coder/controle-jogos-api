@@ -18,12 +18,14 @@ const insertPais = async function (pais) {
         let sql = `insert into tbl_pais (
 
                                         nome, 
-                                        sigla
+                                        sigla,
+                                        bandeira_pais
 
                                         ) values (
 
                                             '${pais.nome}', 
-                                            '${pais.sigla}'
+                                            '${pais.sigla}',
+                                            '${pais.bandeira_pais}'
 
                                         )`
         // Executa o script SQL no banco de dados e aguarda o retorno do banco de dados
@@ -44,8 +46,9 @@ const insertPais = async function (pais) {
 const updatePais = async function (pais) {
     try {
 
-        let SQL = `update tbl_pais set    nome       = '${pais.nome}', 
-                                          sigla      = '${pais.sigla}'
+        let SQL = `update tbl_pais set    nome          = '${pais.nome}', 
+                                          sigla         = '${pais.sigla}',
+                                          bandeira_pais = '${pais.bandeira_pais}'
 
                     where id_pais = ${pais.id}`
 

@@ -36,7 +36,8 @@ create table tbl_sexo (
 create table tbl_pais (
     id_pais int primary key not null auto_increment,
     nome varchar(60) unique not null,
-    sigla varchar(2) unique not null
+    sigla varchar(2) unique not null,
+    bandeira_pais varchar(200) not null
 );
 
 create table tbl_pontuacao (
@@ -44,6 +45,7 @@ create table tbl_pontuacao (
     nota int not null
 );
 
+-- alter table tbl_pais add bandeira_pais varchar(200) not null;
 -- show tables;
--- desc tbl_pontuacao;
+-- desc tbl_pais;
 -- drop table tbl_teste;

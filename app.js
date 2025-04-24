@@ -52,7 +52,6 @@ app.use((request, response, next) => {
 
 /*************************************JOGO********************************************/
 
-
 // Endpoit para inserir um novo jogo no banco de dados
 app.post('/v1/controle-jogos/jogo', cors(), bodyParserJSON, async function (request, response) {
     
@@ -371,7 +370,7 @@ app.put('/v1/controle-jogos/pontuacao/:id', cors(), bodyParserJSON, async functi
     response.json(resultPontuacao)
 })
 
-/*************************************PONTUACAO********************************************/
+/*************************************SEXO********************************************/
 
 // Endpoint para inserir um novo sexo no banco de dados
 app.post('/v1/controle-jogos/sexo', cors(), bodyParserJSON, async function (request, response) {

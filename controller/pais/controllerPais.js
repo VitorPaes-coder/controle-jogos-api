@@ -17,9 +17,9 @@ const inserirPais = async function(pais, contentType) {
         if (contentType == 'application/json') {
             if (
 
-                pais.nome  == undefined  || pais.nome  == ''  || pais.nome  == null  || pais.nome.length  > 60 ||
-                pais.sigla == undefined  || pais.sigla == ''  || pais.sigla == null  || pais.sigla.length > 2
-
+                pais.nome          == undefined || pais.nome          == '' || pais.nome          == null || pais.nome.length          > 60 ||
+                pais.sigla         == undefined || pais.sigla         == '' || pais.sigla         == null || pais.sigla.length         > 2  ||
+                pais.bandeira_pais == undefined || pais.bandeira_pais == '' || pais.bandeira_pais == null || pais.bandeira_pais.length > 200
             ) {
                 return { status_code: 400, message: MESSAGE.ERROR_REQUIRED_FIELDS }
             } else {
