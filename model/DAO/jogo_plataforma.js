@@ -15,13 +15,13 @@ const insertJogoPlataforma = async function(JogoPlataforma){
     try {
   
         let sql = `insert into tbl_jogo_plataforma  ( 
-                                            id_filme,
-                                            id_genero
+                                            id_jogo,
+                                            id_plataforma
                                           ) 
                                             values 
                                           (
-                                            ${JogoPlataforma.id_filme},
-                                            ${JogoPlataforma.id_genero}
+                                            ${JogoPlataforma.id_jogo},
+                                            ${JogoPlataforma.id_plataforma}
                                           )`
         //console.log(sql)
   
@@ -34,7 +34,7 @@ const insertJogoPlataforma = async function(JogoPlataforma){
         else
             return false
     } catch (error) {
-        
+        console.log(error);
         return false
     }
   }
@@ -42,8 +42,8 @@ const insertJogoPlataforma = async function(JogoPlataforma){
   //Função para atualizar um JogoPlataforma existente
   const updateJogoPlataforma = async function(JogoPlataforma){
     try {
-        let sql = `update tbl_jogo_plataforma set        id_filme       = ${JogoPlataforma.id_filme},
-                                                      id_genero      = ${JogoPlataforma.id_genero}
+        let sql = `update tbl_jogo_plataforma set id_jogo   = ${JogoPlataforma.id_jogo},
+                                              id_plataforma = ${JogoPlataforma.id_plataforma}
                                           
                               where id = ${JogoPlataforma.id}                
                               `
@@ -54,6 +54,7 @@ const insertJogoPlataforma = async function(JogoPlataforma){
         else
           return false
     } catch (error) {
+      console.log(error);
       return false
     }
   }
@@ -70,6 +71,7 @@ const insertJogoPlataforma = async function(JogoPlataforma){
       else 
         return false
     } catch (error) {
+      console.log(error);
       return false
     }
   }
@@ -90,6 +92,7 @@ const insertJogoPlataforma = async function(JogoPlataforma){
           return false
   
       } catch (error) {
+        console.log(error);
         return false
       }
   }
@@ -106,19 +109,20 @@ const insertJogoPlataforma = async function(JogoPlataforma){
       else 
         return false
     } catch (error) {
+      console.log(error);
       return false
     }
   }
   
-  //Função para retornar os dados do genero filtrando pelo Filme
-  const selectGeneroByIdFilme = async function(idFilme){
+  //Função para retornar os dados do plataforma filtrando pelo jogo
+  const selectPlataformaByIdjogo = async function(id){
     try {
-        let sql = `select tbl_genero.* from tbl_filme 
+        let sql = `select tbl_plataforma.* from tbl_jogo 
                             inner join tbl_jogo_plataforma
-                              on tbl_filme.id = tbl_jogo_plataforma.id_filme
-                            inner join tbl_genero
-                              on tbl_genero.id = tbl_jogo_plataforma.id_genero
-                        where tbl_filme.id = ${idFilme}`
+                              on tbl_jogo.id = tbl_jogo_plataforma.id_jogo
+                            inner join tbl_plataforma
+                              on tbl_plataforma.id = tbl_jogo_plataforma.id_plataforma
+                        where tbl_jogo.id = ${id}`
   
         let result = await prisma.$queryRawUnsafe(sql)
   
@@ -127,19 +131,20 @@ const insertJogoPlataforma = async function(JogoPlataforma){
         else 
           return false
     } catch (error) {
-        return false
+        console.log(error);
+        return false 
     }
   }
   
-  //Função para retornar os dados do filme filtrando pelo Genero
-  const selectFilmeByIdGenero = async function(idGenero){
+  //Função para retornar os dados do jogo filtrando pela plataforma
+  const selectJogoByIdplataforma = async function(id_plataforma){
     try {
-        let sql = `select tbl_filme.* from tbl_filme 
+        let sql = `select tbl_jogo.* from tbl_jogo 
                             inner join tbl_jogo_plataforma
-                              on tbl_filme.id = tbl_jogo_plataforma.id_filme
-                            inner join tbl_genero
-                              on tbl_genero.id = tbl_jogo_plataforma.id_genero
-                        where tbl_genero.id = ${idGenero}`
+                              on tbl_jogo.id = tbl_jogo_plataforma.id_jogo
+                            inner join tbl_plataforma
+                              on tbl_plataforma.id = tbl_jogo_plataforma.id_plataforma
+                        where tbl_plataforma.id = ${id_plataforma}`
   
         let result = await prisma.$queryRawUnsafe(sql)
   
@@ -148,19 +153,17 @@ const insertJogoPlataforma = async function(JogoPlataforma){
         else 
           return false
     } catch (error) {
+        console.log(error);
         return false
     }
   }
   
-  
-  
-  
-  module.exports = {
-      insertJogoPlataforma,
-      updateJogoPlataforma,
-      deleteJogoPlataforma,
-      selectAllJogoPlataforma,
-      selectByIdJogoPlataforma,
-      selectFilmeByIdGenero,
-      selectGeneroByIdFilme
-  } 
+module.exports = {
+  insertJogoPlataforma,
+  updateJogoPlataforma,
+  deleteJogoPlataforma,
+  selectAllJogoPlataforma,
+  selectByIdJogoPlataforma,
+  selectJogoByIdplataforma,
+  selectPlataformaByIdjogo
+} 
