@@ -115,7 +115,7 @@ const insertJogoPlataforma = async function(JogoPlataforma){
   }
   
   //Função para retornar os dados do plataforma filtrando pelo jogo
-  const selectPlataformaByIdjogo = async function(id){
+  const selectPlataformaByIdJogo = async function(id){
     try {
         let sql = `select tbl_plataforma.* from tbl_jogo 
                             inner join tbl_jogo_plataforma
@@ -137,7 +137,7 @@ const insertJogoPlataforma = async function(JogoPlataforma){
   }
   
   //Função para retornar os dados do jogo filtrando pela plataforma
-  const selectJogoByIdplataforma = async function(id_plataforma){
+  const selectJogoByIdPlataforma = async function(id_plataforma){
     try {
         let sql = `select tbl_jogo.* from tbl_jogo 
                             inner join tbl_jogo_plataforma
@@ -164,6 +164,6 @@ module.exports = {
   deleteJogoPlataforma,
   selectAllJogoPlataforma,
   selectByIdJogoPlataforma,
-  selectJogoByIdplataforma,
-  selectPlataformaByIdjogo
+  selectJogoByIdPlataforma,
+  selectPlataformaByIdJogo
 } 
