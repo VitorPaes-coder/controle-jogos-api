@@ -1,103 +1,94 @@
 /************************************************************************************************
- * Objetivo: Controller reponsavel pela regra de negócio do CRUD do país
- * Data: 17/04/25
+ * Objetivo: Controller responsável pela regra de negócio do CRUD de jogo_genero
+ * Data: 18/05/25
  * Autor: Vitor Paes Rodrigues
  * Versão:1.0
- * ********************************************************************************************/
+ ********************************************************************************************/
 
-// Importando o arquivo de configuração para mensagens e status code
+// Importando o arquivo de mensagens e status code do projeto
 const MESSAGE = require('../../modulo/config.js')
 
-// Import do DAO para realizar o CRUD no banco de dados
-const paisDAO = require('../../model/DAO/.js')
+// Import do DAO para realizar o CRUD de dados no Banco de Dados
+const jogoGeneroDAO = require('../../model/DAO/jogoGenero.js')
 
-// Função para inserir um novo país
-const inserirPais = async function(pais, contentType) {
+// Função para inserir um novo jogo_genero
+const inserirJogoGenero = async function(jogoGenero, contentType){
     try {
-        if (contentType == 'application/json') {
+        if(String(contentType).toLowerCase() == 'application/json') {
             if (
-
-                pais.nome          == undefined || pais.nome          == '' || pais.nome          == null || pais.nome.length          > 60 ||
-                pais.sigla         == undefined || pais.sigla         == '' || pais.sigla         == null || pais.sigla.length         > 2  ||
-                pais.bandeira_pais == undefined || pais.bandeira_pais == '' || pais.bandeira_pais == null || pais.bandeira_pais.length > 200
+                jogoGenero.id_jogo   == '' || jogoGenero.id_jogo   == undefined || jogoGenero.id_jogo   == null || isNaN(jogoGenero.id_jogo)   || jogoGenero.id_jogo   <= 0 ||
+                jogoGenero.id_genero == '' || jogoGenero.id_genero == undefined || jogoGenero.id_genero == null || isNaN(jogoGenero.id_genero) || jogoGenero.id_genero <= 0
             ) {
-                return { status_code: 400, message: MESSAGE.ERROR_REQUIRED_FIELDS }
+                return MESSAGE.ERROR_REQUIRED_FIELDS
             } else {
-                // Encaminha os dados do novo país para serem inseridos no banco de dados
-                let resultPais = await paisDAO.insertPais(pais)
-
-                if (resultPais)
-                    return { status_code: 201, message: MESSAGE.SUCESS_CREATED_ITEM } // 201
+                let result = await jogoGeneroDAO.insertJogoGenero(jogoGenero)
+                if(result)
+                    return MESSAGE.SUCESS_CREATED_ITEM
                 else
-                    return { status_code: 500, message: MESSAGE.ERROR_INTERNAL_SERVER_MODEL } // 500
+                    return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
             }
         } else {
-            return MESSAGE.ERROR_CONTENT_TYPE // 415
+            return MESSAGE.ERROR_CONTENT_TYPE
         }
     } catch (error) {
-        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER // 500
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
 
-// Função para atualizar um país existente
-const atualizarPais = async function(pais, id, contentType) {
+// Função para atualizar um jogo_genero existente
+const atualizarJogoGenero = async function(id, jogoGenero, contentType){
     try {
-        if (contentType == 'application/json') {
+        if(String(contentType).toLowerCase() == 'application/json') {
             if (
-
-                pais.nome  == undefined  || pais.nome  == ''  || pais.nome  == null  || pais.nome.length  > 60 ||
-                pais.sigla == undefined  || pais.sigla == ''  || pais.sigla == null  || pais.sigla.length > 2
-
+                id == '' || id == undefined || id == null || isNaN(id) || id <= 0 ||
+                jogoGenero.id_jogo   == '' || jogoGenero.id_jogo   == undefined || jogoGenero.id_jogo   == null || isNaN(jogoGenero.id_jogo)   || jogoGenero.id_jogo   <= 0 ||
+                jogoGenero.id_genero == '' || jogoGenero.id_genero == undefined || jogoGenero.id_genero == null || isNaN(jogoGenero.id_genero) || jogoGenero.id_genero <= 0
             ) {
-                return { status_code: 400, message: MESSAGE.ERROR_REQUIRED_FIELDS }
+                return MESSAGE.ERROR_REQUIRED_FIELDS
             } else {
-                let resultPais = await buscarPais(parseInt(id))
-
-                if (resultPais.status_code == 200) {
-                    // Atualiza
-                    // Adiciona um atributo id no JSON para encaminhar o id da requisição
-                    pais.id = parseInt(id)
-                    let result = await paisDAO.updatePais(pais)
-
-                    if (result)
-                        return MESSAGE.SUCESS_UPDATED_ITEM // 200
-                    else
-                        return MESSAGE.ERROR_INTERNAL_SERVER_MODEL // 500
-                } else if (resultPais.status_code == 404) {
-                    return MESSAGE.ERROR_NOT_FOUND // 404
+                let resultJogoGenero = await jogoGeneroDAO.selectByIdJogoGenero(parseInt(id))
+                if(resultJogoGenero != false || typeof(resultJogoGenero) == 'object'){
+                    if(resultJogoGenero.length > 0){
+                        jogoGenero.id = parseInt(id)
+                        let result = await jogoGeneroDAO.updateJogoGenero(jogoGenero)
+                        if(result)
+                            return MESSAGE.SUCESS_UPDATED_ITEM
+                        else
+                            return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
+                    } else {
+                        return MESSAGE.ERROR_NOT_FOUND
+                    }
                 } else {
-                    return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER // 500
+                    return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
                 }
             }
         } else {
-            return MESSAGE.ERROR_CONTENT_TYPE // 415
+            return MESSAGE.ERROR_CONTENT_TYPE
         }
     } catch (error) {
-        console.error(error);
-        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER // 500
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
 
-// Função para excluir um país existente
-const excluirPais = async function(id) {
+// Função para excluir um jogo_genero existente
+const excluirJogoGenero = async function(id){
     try {
-        if (isNaN(id) || id == undefined || id == null || id == '' || id <= 0) {
-            return { status_code: 400, message: MESSAGE.ERROR_REQUIRED_FIELDS }
+        if(id == '' || id == undefined || id == null || isNaN(id) || id <= 0){
+            return MESSAGE.ERROR_REQUIRED_FIELDS
         } else {
-            // Chama a função para deletar o país pelo id
-            let resultPais = await buscarPais(parseInt(id))
-
-            if (resultPais.status_code == 200) {
-                let result = await paisDAO.deletePais(parseInt(id))
-
-                if (result)
-                    return { status_code: 200, message: MESSAGE.SUCESS_DELETED_ITEM }
-                else
-                    return { status_code: 500, message: MESSAGE.ERROR_INTERNAL_SERVER_MODEL }
-            } else if (resultPais.status_code == 404) {
-                return MESSAGE.ERROR_NOT_FOUND
+            let resultJogoGenero = await jogoGeneroDAO.selectByIdJogoGenero(parseInt(id))
+            if(resultJogoGenero != false || typeof(resultJogoGenero) == 'object'){
+                if(resultJogoGenero.length > 0){
+                    let result = await jogoGeneroDAO.deleteJogoGenero(parseInt(id))
+                    if(result)
+                        return MESSAGE.SUCESS_DELETED_ITEM
+                    else
+                        return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
+                } else {
+                    return MESSAGE.ERROR_NOT_FOUND
+                }
             } else {
-                return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
+                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
             }
         }
     } catch (error) {
@@ -105,23 +96,24 @@ const excluirPais = async function(id) {
     }
 }
 
-// Função para listar todos os países
-const listarPais = async function() {
+// Função para listar todos os jogo_genero
+const listarJogoGenero = async function(){
     try {
-        let dadosPaises = {}
-        // Chama a função para retornar os dados dos países
-        let resultPais = await paisDAO.selectAllPais()
+        let dadosJogoGenero = {}
 
-        if (resultPais != false || typeof resultPais == 'object') {
-            if (resultPais.length > 0) {
-                dadosPaises.status = true
-                dadosPaises.status_code = 200
-                dadosPaises.items = resultPais.length
-                dadosPaises.data = resultPais
+        let resultJogoGenero = await jogoGeneroDAO.selectAllJogoGenero()
 
-                return dadosPaises
+        if(resultJogoGenero != false || typeof(resultJogoGenero) == 'object'){
+            if(resultJogoGenero.length > 0){
+
+                dadosJogoGenero.status = true
+                dadosJogoGenero.status_code = 200
+                dadosJogoGenero.items = resultJogoGenero.length
+                dadosJogoGenero.data = resultJogoGenero
+                return dadosJogoGenero
+
             } else {
-                return MESSAGE.ERROR_NOT_FOUND // 404
+                return MESSAGE.ERROR_NOT_FOUND
             }
         } else {
             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
@@ -131,39 +123,72 @@ const listarPais = async function() {
     }
 }
 
-// Função para buscar um país
-const buscarPais = async function(id) {
+// Função para buscar um jogo_genero pelo ID
+const buscarJogoGenero = async function(id){
     try {
-        let dadosPaises = {}
-        // Chama a função para retornar os dados do país
-        let resultPais = await paisDAO.selectByIdPais(parseInt(id))
-
-        if (isNaN(id) || id == undefined || id == null || id == '' || id <= 0) {
-            return { status_code: 400, message: MESSAGE.ERROR_REQUIRED_FIELDS }
+        if(id == '' || id == undefined || id == null || isNaN(id) || id <= 0){
+            return MESSAGE.ERROR_REQUIRED_FIELDS
         } else {
-            if (resultPais != false || typeof resultPais == 'object') {
-                if (resultPais.length > 0) {
-                    dadosPaises.status = true
-                    dadosPaises.status_code = 200
-                    dadosPaises.data = resultPais
+            let dadosJogoGenero = {}
 
-                    return dadosPaises
+            let resultJogoGenero = await jogoGeneroDAO.selectByIdJogoGenero(parseInt(id))
+
+            if(resultJogoGenero != false || typeof(resultJogoGenero) == 'object'){
+                if(resultJogoGenero.length > 0){
+
+                    dadosJogoGenero.status = true
+                    dadosJogoGenero.status_code = 200
+                    dadosJogoGenero.data = resultJogoGenero
+
+                    return dadosJogoGenero //200
                 } else {
-                    return MESSAGE.ERROR_NOT_FOUND // 404
+                    return MESSAGE.ERROR_NOT_FOUND //404
                 }
             } else {
-                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL // 500
+                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
             }
         }
     } catch (error) {
-        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER // 500
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+}
+
+// Função para buscar um genero pelo ID do jogo
+const buscarGeneroPorJogo = async function(idJogo){
+    try {
+        if(idJogo == '' || idJogo == undefined || idJogo == null || isNaN(idJogo) || idJogo <=0){
+            return MESSAGE.ERROR_REQUIRED_FIELDS //400
+        }else{
+            dadosgenero = {}
+
+            let resultgenero = await jogoGeneroDAO.selectGeneroByIdJogo(parseInt(idJogo))
+            
+            if(resultgenero != false || typeof(resultgenero) == 'object'){
+                if(resultgenero.length > 0){
+                     //Criando um JSON de retorno de dados para a API
+                    dadosgenero.status = true
+                    dadosgenero.status_code = 200
+                    dadosgenero.genero = resultgenero
+
+                    return dadosgenero //200
+                }else{
+                    return MESSAGE.ERROR_NOT_FOUND //404
+                }
+            }else{
+                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+            }
+        }
+
+    } catch (error) {
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
 
 module.exports = {
-    inserirPais,
-    atualizarPais,
-    excluirPais,
-    listarPais,
-    buscarPais,
+    inserirJogoGenero,
+    atualizarJogoGenero,
+    excluirJogoGenero,
+    listarJogoGenero,
+    buscarJogoGenero,
+    buscarGeneroPorJogo
 }
