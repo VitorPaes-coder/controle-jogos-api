@@ -184,11 +184,40 @@ const buscarGeneroPorJogo = async function(idJogo){
     }
 }
 
+const buscarJogoPorGenero = async function(idGenero) {
+    try {
+        if (idGenero == '' || idGenero == undefined || idGenero == null || isNaN(idGenero) || idGenero <= 0) {
+            return MESSAGE.ERROR_REQUIRED_FIELDS
+        } else {
+            let dadosJogo = {}
+
+            let resultJogo = await jogoGeneroDAO.selectJogoByIdGenero(parseInt(idGenero))
+
+            if (resultJogo != false || typeof(resultJogo) == 'object') {
+                if (resultJogo.length > 0) {
+                    dadosJogo.status = true
+                    dadosJogo.status_code = 200
+                    dadosJogo.jogos = resultJogo
+
+                    return dadosJogo //200
+                } else {
+                    return MESSAGE.ERROR_NOT_FOUND //404
+                }
+            } else {
+                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+            }
+        }
+    } catch (error) {
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+}
+
 module.exports = {
     inserirJogoGenero,
     atualizarJogoGenero,
     excluirJogoGenero,
     listarJogoGenero,
     buscarJogoGenero,
-    buscarGeneroPorJogo
+    buscarGeneroPorJogo,
+    buscarJogoPorGenero
 }

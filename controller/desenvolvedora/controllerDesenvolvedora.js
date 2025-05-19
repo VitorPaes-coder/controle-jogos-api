@@ -108,8 +108,8 @@ const excluirDesenvolvedora = async function(id) {
 // Função para listar todas as desenvolvedoras
 const listarDesenvolvedora = async function() {
     try {
+        const arrayDesenvolvedoras = []
         let dadosDesenvolvedoras = {}
-        // Chama a função para retornar os dados das desenvolvedoras
         let resultDesenvolvedora = await desenvolvedoraDAO.selectAllDesenvolvedora()
 
         if (resultDesenvolvedora != false || typeof resultDesenvolvedora == 'object') {
@@ -117,46 +117,56 @@ const listarDesenvolvedora = async function() {
                 dadosDesenvolvedoras.status = true
                 dadosDesenvolvedoras.status_code = 200
                 dadosDesenvolvedoras.items = resultDesenvolvedora.length
-                dadosDesenvolvedoras.data = resultDesenvolvedora
 
+                for (let itemDesenvolvedora of resultDesenvolvedora) {
+                    let dadosPais = await controllerPaisDesenvolvedora.buscarPaisPorDesenvolvedora(itemDesenvolvedora.id_desenvolvedora)
+                    itemDesenvolvedora.paises = dadosPais.paises
+                    arrayDesenvolvedoras.push(itemDesenvolvedora)
+                }
+
+                dadosDesenvolvedoras.data = arrayDesenvolvedoras
                 return dadosDesenvolvedoras
             } else {
-                return MESSAGE.ERROR_NOT_FOUND // 404
+                return MESSAGE.ERROR_NOT_FOUND
             }
         } else {
             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
         }
     } catch (error) {
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
 
-// Função para buscar uma desenvolvedora
+// Função para buscar uma desenvolvedora pelo ID
 const buscarDesenvolvedora = async function(id) {
     try {
-        let dadosDesenvolvedoras = {}
-        // Chama a função para retornar os dados da desenvolvedora
-        let resultDesenvolvedora = await desenvolvedoraDAO.selectByIdDesenvolvedora(parseInt(id))
-
         if (isNaN(id) || id == undefined || id == null || id == '' || id <= 0) {
             return { status_code: 400, message: MESSAGE.ERROR_REQUIRED_FIELDS }
-        } else {
-            if (resultDesenvolvedora != false || typeof resultDesenvolvedora == 'object') {
-                if (resultDesenvolvedora.length > 0) {
-                    dadosDesenvolvedoras.status = true
-                    dadosDesenvolvedoras.status_code = 200
-                    dadosDesenvolvedoras.data = resultDesenvolvedora
+        }
 
-                    return dadosDesenvolvedoras
-                } else {
-                    return MESSAGE.ERROR_NOT_FOUND // 404
+        let dadosDesenvolvedoras = {}
+        let resultDesenvolvedora = await desenvolvedoraDAO.selectByIdDesenvolvedora(parseInt(id))
+
+        if (resultDesenvolvedora != false || typeof resultDesenvolvedora == 'object') {
+            if (resultDesenvolvedora.length > 0) {
+                for (let itemDesenvolvedora of resultDesenvolvedora) {
+                    let dadosPais = await controllerPaisDesenvolvedora.buscarPaisPorDesenvolvedora(itemDesenvolvedora.id_desenvolvedora)
+                    itemDesenvolvedora.paises = dadosPais.paises
                 }
+                dadosDesenvolvedoras.status = true
+                dadosDesenvolvedoras.status_code = 200
+                dadosDesenvolvedoras.data = resultDesenvolvedora
+                return dadosDesenvolvedoras
             } else {
-                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL // 500
+                return MESSAGE.ERROR_NOT_FOUND
             }
+        } else {
+            return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
         }
     } catch (error) {
-        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER // 500
+        console.log(error)
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
 

@@ -11,12 +11,14 @@ const MESSAGE = require('../../modulo/config.js')
 // Import do DAO para realizar o CRUD no banco de dados
 const paisDAO = require('../../model/DAO/pais.js')
 
+// Import da controller para buscar desenvolvedoras relacionadas ao país
+const controllerPaisDesenvolvedora = require('../pais-desenvolvedora/controllerPaisDesenvolvedora.js')
+
 // Função para inserir um novo país
 const inserirPais = async function(pais, contentType) {
     try {
         if (contentType == 'application/json') {
             if (
-
                 pais.nome          == undefined || pais.nome          == '' || pais.nome          == null || pais.nome.length          > 60 ||
                 pais.sigla         == undefined || pais.sigla         == '' || pais.sigla         == null || pais.sigla.length         > 2  ||
                 pais.bandeira_pais == undefined || pais.bandeira_pais == '' || pais.bandeira_pais == null || pais.bandeira_pais.length > 200
@@ -44,10 +46,8 @@ const atualizarPais = async function(pais, id, contentType) {
     try {
         if (contentType == 'application/json') {
             if (
-
                 pais.nome  == undefined  || pais.nome  == ''  || pais.nome  == null  || pais.nome.length  > 60 ||
                 pais.sigla == undefined  || pais.sigla == ''  || pais.sigla == null  || pais.sigla.length > 2
-
             ) {
                 return { status_code: 400, message: MESSAGE.ERROR_REQUIRED_FIELDS }
             } else {
@@ -55,7 +55,6 @@ const atualizarPais = async function(pais, id, contentType) {
 
                 if (resultPais.status_code == 200) {
                     // Atualiza
-                    // Adiciona um atributo id no JSON para encaminhar o id da requisição
                     pais.id = parseInt(id)
                     let result = await paisDAO.updatePais(pais)
 
@@ -84,7 +83,6 @@ const excluirPais = async function(id) {
         if (isNaN(id) || id == undefined || id == null || id == '' || id <= 0) {
             return { status_code: 400, message: MESSAGE.ERROR_REQUIRED_FIELDS }
         } else {
-            // Chama a função para deletar o país pelo id
             let resultPais = await buscarPais(parseInt(id))
 
             if (resultPais.status_code == 200) {
@@ -109,7 +107,6 @@ const excluirPais = async function(id) {
 const listarPais = async function() {
     try {
         let dadosPaises = {}
-        // Chama a função para retornar os dados dos países
         let resultPais = await paisDAO.selectAllPais()
 
         if (resultPais != false || typeof resultPais == 'object') {
@@ -117,8 +114,16 @@ const listarPais = async function() {
                 dadosPaises.status = true
                 dadosPaises.status_code = 200
                 dadosPaises.items = resultPais.length
-                dadosPaises.data = resultPais
 
+                const arrayPaises = []
+
+                for (let itemPais of resultPais) {
+                    let dadosDesenvolvedora = await controllerPaisDesenvolvedora.buscarDesenvolvedoraPorPais(itemPais.id_pais)
+                    itemPais.desenvolvedoras = dadosDesenvolvedora && dadosDesenvolvedora.desenvolvedoras ? dadosDesenvolvedora.desenvolvedoras : []
+                    arrayPaises.push(itemPais)
+                }
+
+                dadosPaises.data = arrayPaises
                 return dadosPaises
             } else {
                 return MESSAGE.ERROR_NOT_FOUND // 404
@@ -131,11 +136,9 @@ const listarPais = async function() {
     }
 }
 
-// Função para buscar um país
 const buscarPais = async function(id) {
     try {
         let dadosPaises = {}
-        // Chama a função para retornar os dados do país
         let resultPais = await paisDAO.selectByIdPais(parseInt(id))
 
         if (isNaN(id) || id == undefined || id == null || id == '' || id <= 0) {
@@ -143,9 +146,17 @@ const buscarPais = async function(id) {
         } else {
             if (resultPais != false || typeof resultPais == 'object') {
                 if (resultPais.length > 0) {
+                    const arrayPaises = []
+
+                    for (let itemPais of resultPais) {
+                        let dadosDesenvolvedora = await controllerPaisDesenvolvedora.buscarDesenvolvedoraPorPais(itemPais.id_pais)
+                        itemPais.desenvolvedoras = dadosDesenvolvedora && dadosDesenvolvedora.desenvolvedoras ? dadosDesenvolvedora.desenvolvedoras : []
+                        arrayPaises.push(itemPais)
+                    }
+
                     dadosPaises.status = true
                     dadosPaises.status_code = 200
-                    dadosPaises.data = resultPais
+                    dadosPaises.data = arrayPaises
 
                     return dadosPaises
                 } else {
@@ -158,6 +169,14 @@ const buscarPais = async function(id) {
     } catch (error) {
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER // 500
     }
+}
+
+module.exports = {
+    inserirPais,
+    atualizarPais,
+    excluirPais,
+    listarPais,
+    buscarPais,
 }
 
 module.exports = {

@@ -40,12 +40,6 @@ create table tbl_pais (
     bandeira_pais varchar(200) not null
 );
 
-create table tbl_pontuacao (
-    id_pontuacao int primary key not null auto_increment,
-    nota int not null
-);
-
-/***************************************SEM CONTROLLER E APP*************************************************/
 
 create table tbl_jogo_genero (
     id int not null primary key auto_increment,
@@ -85,12 +79,10 @@ create table tbl_avaliacao (
     id_avaliacao int not null primary key auto_increment,
     data date not null,
     comentario text,
+    nota int not null,
     id_pontuacao int not null,
     id_usuario int not null,
     id_jogo int not null,
-    constraint FK_PONTUACAO_AVALIACAO
-    foreign key (id_pontuacao) 
-    references tbl_pontuacao(id_pontuacao),
     
     constraint FK_USUARIO_AVALIACAO
     foreign key (id_usuario) 
@@ -143,7 +135,5 @@ create table tbl_pais_desenvolvedora (
 
 
 
--- alter table tbl_pais add bandeira_pais varchar(200) not null;
--- show tables;
--- desc tbl_pais;
--- drop table tbl_teste;
+-- alter table tbl_desenvolvedora add logo varchar(250);
+-- alter table tbl_avaliacao add nota INT NOT NULL;

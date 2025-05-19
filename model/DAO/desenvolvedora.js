@@ -18,12 +18,14 @@ const insertDesenvolvedora = async function (desenvolvedora) {
         let sql = `insert into tbl_desenvolvedora (
 
                                         nome, 
-                                        descricao
+                                        descricao,
+                                        logo
 
                                         ) values (
 
                                             '${desenvolvedora.nome}', 
                                             '${desenvolvedora.descricao}'
+                                            '${desenvolvedora.logo}'
 
                                         )`
         // Executa o script SQL no banco de dados e aguarda o retorno do banco de dados
@@ -45,7 +47,8 @@ const updateDesenvolvedora = async function (desenvolvedora) {
     try {
 
         let SQL = `update tbl_desenvolvedora set    nome       = '${desenvolvedora.nome}', 
-                                                    descricao  = '${desenvolvedora.descricao}'
+                                                    descricao  = '${desenvolvedora.descricao}',
+                                                    logo       = '${desenvolvedora.logo}'
 
                     where id_desenvolvedora = ${desenvolvedora.id}`
 

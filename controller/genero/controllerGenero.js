@@ -11,6 +11,9 @@ const MESSAGE = require('../../modulo/config.js');
 // Import do DAO para realizar o CRUD no banco de dados
 const generoDAO = require('../../model/DAO/genero.js');
 
+// Import da controller para buscar jogos relacionados ao gênero
+const controllerJogoGenero = require('../jogo-genero/controllerJogoGenero.js')
+
 // Função para inserir um novo genero
 const inserirGenero = async function(genero, contentType) {
 
@@ -121,68 +124,64 @@ const excluirGenero = async function(id) {
 
 // Função para listar todos os generos
 const listarGenero = async function() {
-    try{
-
+    try {
+        const arrayGeneros = []
         let dadosGeneros = {}
-        // Chama a função para retornar os dados do genero
         let resultGenero = await generoDAO.selectAllGenero()
 
-        if(resultGenero != false || typeof(resultGenero) == 'object' ){
-            
-        if(resultGenero.length > 0){
-            dadosGeneros.status = true
-            dadosGeneros.status_code = 200
-            dadosGeneros.items = resultGenero.length
-            dadosGeneros.data = resultGenero
+        if (resultGenero != false || typeof resultGenero == 'object') {
+            if (resultGenero.length > 0) {
+                dadosGeneros.status = true
+                dadosGeneros.status_code = 200
+                dadosGeneros.items = resultGenero.length
 
-            return dadosGeneros 
-            }else{
-                return MESSAGE.ERROR_NOT_FOUND //404
+                for (let itemGenero of resultGenero) {
+                    let dadosJogo = await controllerJogoGenero.buscarJogoPorGenero(itemGenero.id_genero)
+                    itemGenero.jogos = dadosJogo.jogos
+                    arrayGeneros.push(itemGenero)
+                }
+
+                dadosGeneros.data = arrayGeneros
+                return dadosGeneros
+            } else {
+                return MESSAGE.ERROR_NOT_FOUND
             }
-        }else{
+        } else {
             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
         }
-    }
-    catch(error){
+    } catch (error) {
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
-
     }
 }
 
-// Função para buscar um genero
+// Função para buscar um genero pelo ID
 const buscarGenero = async function(id) {
-    // Implementação da função
-    try{
+    try {
+        if (isNaN(id) || id == undefined || id == null || id == '' || id <= 0) {
+            return { status_code: 400, message: MESSAGE.ERROR_REQUIRED_FIELDS }
+        }
+
         let dadosGeneros = {}
-        // Chama a função para retornar os dados do genero
         let resultGenero = await generoDAO.selectByIdGenero(parseInt(id))
 
-        if(isNaN(id) || id == undefined || id == null || id == '' || id <= 0){
-
-            return { status_code: 400, message: MESSAGE.ERROR_REQUIRED_FIELDS }
-
-        }else{
-             
-            if(resultGenero != false || typeof(resultGenero) == 'object' ){
-            
-            if(resultGenero.length > 0){
+        if (resultGenero != false || typeof resultGenero == 'object') {
+            if (resultGenero.length > 0) {
+                for (let itemGenero of resultGenero) {
+                    let dadosJogo = await controllerJogoGenero.buscarJogoPorGenero(itemGenero.id_genero)
+                    itemGenero.jogos = dadosJogo.jogos
+                }
                 dadosGeneros.status = true
                 dadosGeneros.status_code = 200
                 dadosGeneros.data = resultGenero
-
-                return dadosGeneros 
-                
-                }else{
-                    return MESSAGE.ERROR_NOT_FOUND //404
-                }
-            }else{
-                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+                return dadosGeneros
+            } else {
+                return MESSAGE.ERROR_NOT_FOUND
             }
+        } else {
+            return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
         }
-    }
-    catch(error){
-        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
-
+    } catch (error) {
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
 

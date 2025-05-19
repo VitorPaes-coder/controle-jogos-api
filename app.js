@@ -31,7 +31,6 @@ const controllerJogo = require('./controller/jogo/controllerJogo.js')
 const controllerGenero = require('./controller/genero/controllerGenero.js')
 const controllerDesenvolvedora = require('./controller/desenvolvedora/controllerDesenvolvedora.js')
 const controllerPlataforma = require('./controller/plataforma/controllerPlataforma.js')
-const controllerPontuacao = require('./controller/pontuacao/controllerPontuacao.js')
 const controllerSexo = require('./controller/sexo/controllerSexo.js')
 const controllerPais = require('./controller/pais/controllerPais.js')
 
@@ -303,71 +302,6 @@ app.put('/v1/controle-jogos/plataforma/:id', cors(), bodyParserJSON, async funct
 
     response.status(resultPlataforma.status_code)
     response.json(resultPlataforma)
-})
-
-/*************************************PONTUACAO********************************************/
-
-// Endpoint para inserir uma nova pontuação no banco de dados
-app.post('/v1/controle-jogos/pontuacao', cors(), bodyParserJSON, async function (request, response) {
-    
-    // Recebe o content type para validar o tipo de dados da requisição
-    let contentType = request.headers['content-type']
-    
-    // Recebe o conteúdo do body da requisição
-    let dadosBody = request.body
-
-    // Encaminha os dados da nova pontuação para a controller inserir no banco de dados
-    let resultPontuacao = await controllerPontuacao.inserirPontuacao(dadosBody, contentType)
-
-    response.status(resultPontuacao.status_code)
-    response.json(resultPontuacao)   
-}) 
-
-// Endpoint para retornar uma lista de pontuações
-app.get('/v1/controle-jogos/pontuacao', cors(), async function (request, response) {
-    // Chama a função para listar as pontuações
-    let resultPontuacao = await controllerPontuacao.listarPontuacao()
-
-    response.status(resultPontuacao.status_code)
-    response.json(resultPontuacao)
-})
-
-// Endpoint para retornar uma pontuação específica
-app.get('/v1/controle-jogos/pontuacao/:id', cors(), async function (request, response) {
-    let idPontuacao = request.params.id
-    // Chama a função para buscar a pontuação
-    let resultPontuacao = await controllerPontuacao.buscarPontuacao(idPontuacao)
-
-    response.status(resultPontuacao.status_code)
-    response.json(resultPontuacao)
-})
-
-// Endpoint para excluir uma pontuação
-app.delete('/v1/controle-jogos/pontuacao/:id', cors(), async function (request, response) {
-    let idPontuacao = request.params.id
-    // Chama a função para excluir a pontuação
-    let resultPontuacao = await controllerPontuacao.excluirPontuacao(idPontuacao)
-
-    response.status(resultPontuacao.status_code)
-    response.json(resultPontuacao)
-})
-
-// Endpoint para atualizar uma pontuação
-app.put('/v1/controle-jogos/pontuacao/:id', cors(), bodyParserJSON, async function (request, response) {
-    // Recebe o content type para validar o tipo de dados da requisição
-    let contentType = request.headers['content-type']
-
-    // Recebe o id da pontuação
-    let idPontuacao = request.params.id
-    
-    // Recebe os dados da pontuação encaminhados no body da requisição
-    let dadosBody = request.body
-
-    // Chama a função para atualizar a pontuação
-    let resultPontuacao = await controllerPontuacao.atualizarPontuacao(dadosBody, idPontuacao, contentType)
-
-    response.status(resultPontuacao.status_code)
-    response.json(resultPontuacao)
 })
 
 /*************************************SEXO********************************************/

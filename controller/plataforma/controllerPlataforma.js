@@ -11,14 +11,15 @@ const MESSAGE = require('../../modulo/config.js')
 // Import do DAO para realizar o CRUD no banco de dados
 const plataformaDAO = require('../../model/DAO/plataforma.js')
 
+// Import da controller para buscar jogos relacionados à plataforma
+const controllerJogoPlataforma = require('../jogo-plataforma/controllerJogoPlataforma.js')
+
 // Função para inserir uma nova plataforma
 const inserirPlataforma = async function(plataforma, contentType) {
     try {
         if (contentType == 'application/json') {
             if (
-
-                plataforma.nome      == undefined || plataforma.nome == '' || plataforma.nome == null || plataforma.nome.length > 100 
-
+                plataforma.nome == undefined || plataforma.nome == '' || plataforma.nome == null || plataforma.nome.length > 100 
             ) {
                 return { status_code: 400, message: MESSAGE.ERROR_REQUIRED_FIELDS }
             } else {
@@ -43,9 +44,7 @@ const atualizarPlataforma = async function(plataforma, id, contentType) {
     try {
         if (contentType == 'application/json') {
             if (
-
                 plataforma.nome == undefined || plataforma.nome == '' || plataforma.nome == null || plataforma.nome.length > 100 
-
             ) {
                 return { status_code: 400, message: MESSAGE.ERROR_REQUIRED_FIELDS }
             } else {
@@ -115,8 +114,16 @@ const listarPlataforma = async function() {
                 dadosPlataformas.status = true
                 dadosPlataformas.status_code = 200
                 dadosPlataformas.items = resultPlataforma.length
-                dadosPlataformas.data = resultPlataforma
 
+                const arrayPlataformas = []
+
+                for (let itemPlataforma of resultPlataforma) {
+                    let dadosJogo = await controllerJogoPlataforma.buscarJogoPorPlataforma(itemPlataforma.id_plataforma)
+                    itemPlataforma.jogos = dadosJogo && dadosJogo.jogos ? dadosJogo.jogos : []
+                    arrayPlataformas.push(itemPlataforma)
+                }
+
+                dadosPlataformas.data = arrayPlataformas
                 return dadosPlataformas
             } else {
                 return MESSAGE.ERROR_NOT_FOUND // 404
@@ -141,9 +148,17 @@ const buscarPlataforma = async function(id) {
         } else {
             if (resultPlataforma != false || typeof resultPlataforma == 'object') {
                 if (resultPlataforma.length > 0) {
+                    const arrayPlataformas = []
+
+                    for (let itemPlataforma of resultPlataforma) {
+                        let dadosJogo = await controllerJogoPlataforma(itemPlataforma.id_plataforma)
+                        itemPlataforma.jogos = dadosJogo && dadosJogo.jogos ? dadosJogo.jogos : []
+                        arrayPlataformas.push(itemPlataforma)
+                    }
+
                     dadosPlataformas.status = true
                     dadosPlataformas.status_code = 200
-                    dadosPlataformas.data = resultPlataforma
+                    dadosPlataformas.data = arrayPlataformas
 
                     return dadosPlataformas
                 } else {
@@ -163,5 +178,5 @@ module.exports = {
     atualizarPlataforma,
     excluirPlataforma,
     listarPlataforma,
-    buscarPlataforma,
+    buscarPlataforma
 }

@@ -14,6 +14,7 @@ const jogoDAO = require('../../model/DAO/jogo.js')
 // Import das controllers para criar as relações com o jogo
 const controllerJogoGenero = require('../jogo-genero/controllerJogoGenero.js')
 const controllerJogoPlataforma = require('../jogo/controllerJogoPlataforma.js')
+const controllerJogoDesenvolvedora = require('../jogo-desenvolvedora/controllerJogoDesenvolvedora.js')
 
 // Função para inserir um novo jogo
 const inserirJogo = async function(jogo, contentType) {
@@ -133,6 +134,10 @@ const listarJogo = async function() {
                     let dadosPlataforma = await controllerJogoPlataforma.buscarPlataformaPorJogo(itemJogo.id)
                     itemJogo.plataformas = dadosPlataforma.plataforma
 
+                    // Adiciona as desenvolvedoras ao jogo
+                    let dadosDesenvolvedora = await controllerJogoDesenvolvedora.buscarDesenvolvedoraPorJogo(itemJogo.id)
+                    itemJogo.desenvolvedoras = dadosDesenvolvedora.desenvolvedora
+
                     arrayJogos.push(itemJogo)
                 }
 
@@ -170,6 +175,10 @@ const buscarJogo = async function(id) {
                     // Adiciona as plataformas ao jogo
                     let dadosPlataforma = await controllerJogoPlataforma.buscarPlataformaPorJogo(itemJogo.id)
                     itemJogo.plataformas = dadosPlataforma.plataforma
+
+                    // Adiciona as desenvolvedoras ao jogo
+                    let dadosDesenvolvedora = await controllerJogoDesenvolvedora.buscarDesenvolvedoraPorJogo(itemJogo.id)
+                    itemJogo.desenvolvedoras = dadosDesenvolvedora.desenvolvedora
                 }
                 dadosJogos.status = true
                 dadosJogos.status_code = 200

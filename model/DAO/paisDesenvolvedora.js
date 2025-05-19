@@ -1,5 +1,5 @@
 /************************************************************************************************
- * Objetivo: Model reponsavel pelo CRUD de dados referete a tabela de paiss no Banco de Dados
+ * Objetivo: Model reponsavel pelo CRUD de dados referete a tabela de paises no Banco de Dados
  * Data: 13/02/25
  * Autor: Vitor Paes Rodrigues
  * Versão:1.0
