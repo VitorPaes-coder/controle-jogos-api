@@ -1,4 +1,6 @@
-use db_controle_jogos_bb;
+create database if not exists db_controle_jogos_bb_vitor;
+
+use db_controle_jogos_bb_vitor;
 
 create table tbl_jogo (
 	id int not null primary key auto_increment,
@@ -24,7 +26,8 @@ create table tbl_plataforma (
 create table tbl_desenvolvedora (
     id_desenvolvedora int primary key not null auto_increment,
     nome varchar(100) unique not null,
-    descricao text null   
+    descricao text null,
+    logo varchar(250)
 );
 
 create table tbl_sexo (
@@ -130,5 +133,7 @@ create table tbl_pais_desenvolvedora (
     references tbl_pais(id_pais)
 );
 
+desc tbl_pais;
+-- show tables;
 -- alter table tbl_desenvolvedora add logo varchar(250);
 -- alter table tbl_avaliacao add nota INT NOT NULL;

@@ -18,12 +18,13 @@ const controllerPais   = require('../pais/controllerPais.js')
 //Função para tratar a inserção de um novo usuario no DAO
 const inserirUsuario = async function(usuario, contentType){
     try {
+        console.log("Dados recebidos:", usuario); // Adicione este log
         if(String(contentType).toLowerCase() == 'application/json')
         {
                 if (usuario.nome              == ''           || usuario.nome               == undefined    || usuario.nome            == null || usuario.nome.length > 20 ||
                     usuario.email             == ''           || usuario.email            == undefined    || usuario.email         == null || usuario.email.length > 80 ||
                     usuario.senha             == ''           || usuario.senha            == undefined    || usuario.senha         == null || usuario.senha.length > 20 ||
-                    usuario.data_nascimento   == ''           || usuario.data_nascimento   == undefined    || usuario.data_lancamento == null || usuario.data_lancamento.length > 10 ||
+                    usuario.data_nascimento   == ''           || usuario.data_nascimento   == undefined    || usuario.data_nascimento == null || usuario.data_nascimento.length > 10 ||
                     usuario.foto_perfil == undefined  || usuario.foto_perfil.length       > 200   ||
                     usuario.telefone    == undefined  || usuario.telefone.length    > 20   ||
                     usuario.biografia   == undefined  ||
@@ -45,6 +46,8 @@ const inserirUsuario = async function(usuario, contentType){
             return message.ERROR_CONTENT_TYPE //415
         }
     } catch (error) {
+        console.log(error);
+
         return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
@@ -58,8 +61,8 @@ const atualizarUsuario = async function(id, usuario, contentType){
                     usuario.nome              == ''           || usuario.nome               == undefined    || usuario.nome            == null || usuario.nome.length > 20 ||
                     usuario.email             == ''           || usuario.email            == undefined    || usuario.email         == null || usuario.email.length > 80 ||
                     usuario.senha             == ''           || usuario.senha            == undefined    || usuario.senha         == null || usuario.senha.length > 20 ||
-                    usuario.data_nascimento   == ''           || usuario.data_nascimento   == undefined    || usuario.data_lancamento == null || usuario.data_lancamento.length > 10 ||
-                    usuario.foto_perfil == undefined  || usuario.foto_perfil.length       > 200   ||
+                    usuario.data_nascimento   == ''           || usuario.data_nascimento   == undefined    || usuario.data_nascimento == null || usuario.data_nascimento.length > 10 ||
+                    usuario.foto_perfil == undefined  || usuario.foto_perfil.length       > 250   ||
                     usuario.telefone    == undefined  || usuario.telefone.length    > 20   ||
                     usuario.biografia   == undefined  ||
                     usuario.id_sexo == ''           || usuario.id_sexo  == undefined ||
@@ -95,6 +98,8 @@ const atualizarUsuario = async function(id, usuario, contentType){
                 return message.ERROR_CONTENT_TYPE //415
             }
     } catch (error) {
+        console.log(error);
+        
         return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
@@ -128,6 +133,8 @@ const excluirUsuario = async function(id){
             }
         }
     } catch (error) {
+        console.log(error);
+
         return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
@@ -155,10 +162,13 @@ const listarUsuario = async function(){
                 for(itemUsuario of resultUsuario){
 
                         let dadosSexo = await controllerSexo.buscarSexo(itemUsuario.id_sexo)
+                        let dadosPais = await controllerPais.buscarPais(itemUsuario.id_pais)
                         
                         itemUsuario.sexo = dadosSexo.sexo
+                        itemUsuario.pais = dadosPais.pais
 
                         delete itemUsuario.id_sexo
+                        delete itemUsuario.id_pais
 
                     arrayUsuarios.push(itemUsuario)
                 }
@@ -172,6 +182,7 @@ const listarUsuario = async function(){
             return message.ERROR_INTERNAL_SERVER_MODEL //500
         }
     } catch (error) {
+        console.log(error);
 
         return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
@@ -201,9 +212,11 @@ const buscarUsuario = async function(id){
                         //Busca os dados da classificação na controller de classificação
                         //Utilizando o ID da classificação (Chave estrangeira)
                         let dadosSexo = await controllerSexo.buscarSexo(itemUsuario.id_sexo)
+                        let dadosPais = await controllerPais.buscarPais(itemUsuario.id_pais)
                         
                         //Adicionando um atributo "sexo" no JSON de usuarios
                         itemUsuario.sexo = dadosSexo.sexo
+                        itemUsuario.pais = dadosPais.pais
                         //Remove o atributo id_sexo do JSON de usuarios, pois já temos
                         //o ID dentro dos dados da classificação
                         delete itemUsuario.id_sexo
@@ -224,6 +237,8 @@ const buscarUsuario = async function(id){
         }
 
     } catch (error) {
+        console.log(error);
+
         return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
