@@ -40,7 +40,6 @@ create table tbl_pais (
     bandeira_pais varchar(200) not null
 );
 
-
 create table tbl_jogo_genero (
     id int not null primary key auto_increment,
     id_jogo int not null,
@@ -53,7 +52,6 @@ create table tbl_jogo_genero (
     foreign key (id_genero) 
     references tbl_genero(id_genero)
 );
-
 
 create table tbl_usuario (
     id_usuario int not null primary key auto_increment,
@@ -131,9 +129,6 @@ create table tbl_pais_desenvolvedora (
     foreign key (id_pais) 
     references tbl_pais(id_pais)
 );
-
-
-
 
 -- alter table tbl_desenvolvedora add logo varchar(250);
 -- alter table tbl_avaliacao add nota INT NOT NULL;

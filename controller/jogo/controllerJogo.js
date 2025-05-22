@@ -13,7 +13,7 @@ const jogoDAO = require('../../model/DAO/jogo.js')
 
 // Import das controllers para criar as relações com o jogo
 const controllerJogoGenero = require('../jogo-genero/controllerJogoGenero.js')
-const controllerJogoPlataforma = require('../jogo/controllerJogoPlataforma.js')
+const controllerJogoPlataforma = require('../jogo-plataforma/controllerJogoPlataforma.js')
 const controllerJogoDesenvolvedora = require('../jogo-desenvolvedora/controllerJogoDesenvolvedora.js')
 
 // Função para inserir um novo jogo

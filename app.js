@@ -33,6 +33,7 @@ const controllerDesenvolvedora = require('./controller/desenvolvedora/controller
 const controllerPlataforma = require('./controller/plataforma/controllerPlataforma.js')
 const controllerSexo = require('./controller/sexo/controllerSexo.js')
 const controllerPais = require('./controller/pais/controllerPais.js')
+const controllerUsuario = require('./controller/usuario/controllerUsuario.js')
 
 // Estabelecendo o formato de dados que deverá chegar no body da requisição(POST ou PUT)
 const bodyParserJSON = bodyParser.json()
@@ -434,7 +435,71 @@ app.put('/v1/controle-jogos/pais/:id', cors(), bodyParserJSON, async function (r
     response.json(resultPais)
 })
 
-/*********************************************************************************/
+/*************************************USUARIO********************************************/
+
+// Endpoint para inserir um novo usuário no banco de dados
+app.post('/v1/controle-jogos/usuario', cors(), bodyParserJSON, async function (request, response) {
+    // Recebe o content type para validar o tipo de dados da requisição
+    let contentType = request.headers['content-type']
+    
+    // Recebe o conteúdo do body da requisição
+    let dadosBody = request.body
+
+    // Encaminha os dados do novo usuário para a controller inserir no banco de dados
+    let resultUsuario = await controllerUsuario.inserirUsuario(dadosBody, contentType)
+
+    response.status(resultUsuario.status_code)
+    response.json(resultUsuario)   
+})
+
+// Endpoint para retornar uma lista de usuários
+app.get('/v1/controle-jogos/usuario', cors(), async function (request, response) {
+    // Chama a função para listar os usuários
+    let resultUsuario = await controllerUsuario.listarUsuario()
+
+    response.status(resultUsuario.status_code)
+    response.json(resultUsuario)
+})
+
+// Endpoint para retornar um usuário específico
+app.get('/v1/controle-jogos/usuario/:id', cors(), async function (request, response) {
+    let idUsuario = request.params.id
+    // Chama a função para buscar o usuário
+    let resultUsuario = await controllerUsuario.buscarUsuario(idUsuario)
+
+    response.status(resultUsuario.status_code)
+    response.json(resultUsuario)
+})
+
+// Endpoint para excluir um usuário
+app.delete('/v1/controle-jogos/usuario/:id', cors(), async function (request, response) {
+    let idUsuario = request.params.id
+    // Chama a função para excluir o usuário
+    let resultUsuario = await controllerUsuario.excluirUsuario(idUsuario)
+
+    response.status(resultUsuario.status_code)
+    response.json(resultUsuario)
+})
+
+// Endpoint para atualizar um usuário
+app.put('/v1/controle-jogos/usuario/:id', cors(), bodyParserJSON, async function (request, response) {
+    // Recebe o content type para validar o tipo de dados da requisição
+    let contentType = request.headers['content-type']
+
+    // Recebe o id do usuário
+    let idUsuario = request.params.id
+    
+    // Recebe os dados do usuário encaminhados no body da requisição
+    let dadosBody = request.body
+
+    // Chama a função para atualizar o usuário
+    let resultUsuario = await controllerUsuario.atualizarUsuario(idUsuario, dadosBody, contentType)
+
+    response.status(resultUsuario.status_code)
+    response.json(resultUsuario)
+})
+
+/***************************************************************************/
 
 app.listen(8080, function () {
     console.log('API aguardando requisições...')
