@@ -35,6 +35,7 @@ const controllerSexo = require('./controller/sexo/controllerSexo.js')
 const controllerPais = require('./controller/pais/controllerPais.js')
 const controllerUsuario = require('./controller/usuario/controllerUsuario.js')
 const controllerAvaliacao = require('./controller/avaliacao/controllerAvaliacao.js')
+const controllerJogoGenero = require('./controller/jogo-genero/controllerJogoGenero.js')
 
 // Estabelecendo o formato de dados que deverá chegar no body da requisição(POST ou PUT)
 const bodyParserJSON = bodyParser.json()
@@ -50,6 +51,8 @@ app.use((request, response, next) => {
     app.use(cors())
     next()
 })
+
+
 
 /*************************************JOGO********************************************/
 
@@ -114,6 +117,8 @@ app.put('/v1/controle-jogos/jogo/:id', cors(), bodyParserJSON, async function (r
     response.json(resultJogo)
 })
 
+
+
 /*************************************GENERO********************************************/
 
 // Endpoint para inserir um novo genero no banco de dados
@@ -175,6 +180,8 @@ app.put('/v1/controle-jogos/genero/:id', cors(), bodyParserJSON, async function 
     response.status(resultGenero.status_code)
     response.json(resultGenero)
 })
+
+
 
 /*************************************DESENVOLVEDORA********************************************/
 
@@ -241,6 +248,8 @@ app.put('/v1/controle-jogos/desenvolvedora/:id', cors(), bodyParserJSON, async f
     response.json(resultDesenvolvedora)
 })
 
+
+
 /*************************************PLATAFORMA********************************************/
 
 // Endpoint para inserir uma nova plataforma no banco de dados
@@ -305,6 +314,8 @@ app.put('/v1/controle-jogos/plataforma/:id', cors(), bodyParserJSON, async funct
     response.status(resultPlataforma.status_code)
     response.json(resultPlataforma)
 })
+
+
 
 /*************************************SEXO********************************************/
 
@@ -371,6 +382,8 @@ app.put('/v1/controle-jogos/sexo/:id', cors(), bodyParserJSON, async function (r
     response.json(resultSexo)
 })
 
+
+
 /*************************************PAIS********************************************/
 
 // Endpoint para inserir um novo país no banco de dados
@@ -436,6 +449,8 @@ app.put('/v1/controle-jogos/pais/:id', cors(), bodyParserJSON, async function (r
     response.json(resultPais)
 })
 
+
+
 /*************************************USUARIO********************************************/
 
 // Endpoint para inserir um novo usuário no banco de dados
@@ -500,6 +515,8 @@ app.put('/v1/controle-jogos/usuario/:id', cors(), bodyParserJSON, async function
     response.json(resultUsuario)
 })
 
+
+
 /*************************************AVALIACAO********************************************/
 
 // Inserir uma avaliação
@@ -552,6 +569,83 @@ app.get('/v1/controle-jogos/avaliacao/:id', cors(), async function (request, res
     response.status(resultAvaliacao.status_code)
     response.json(resultAvaliacao)
 })
+
+
+
+/***********************************JOGO-GENERO****************************************/
+
+// Inserir um novo jogo-genero
+app.post('/v1/controle-jogos/jogo-genero', cors(), bodyParserJSON, async function (request, response) {
+    let contentType = request.headers['content-type']
+    let dadosBody = request.body
+
+    let result = await controllerJogoGenero.inserirJogoGenero(dadosBody, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// Atualizar um jogo-genero
+app.put('/v1/controle-jogos/jogo-genero/:id', cors(), bodyParserJSON, async function (request, response) {
+    let contentType = request.headers['content-type']
+    let id = request.params.id
+    let dadosBody = request.body
+
+    let result = await controllerJogoGenero.atualizarJogoGenero(id, dadosBody, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// Excluir um jogo-genero
+app.delete('/v1/controle-jogos/jogo-genero/:id', cors(), async function (request, response) {
+    let id = request.params.id
+
+    let result = await controllerJogoGenero.excluirJogoGenero(id)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// Listar todos os jogo-genero
+app.get('/v1/controle-jogos/jogo-genero', cors(), async function (request, response) {
+    let result = await controllerJogoGenero.listarJogoGenero()
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// Buscar um jogo-genero pelo ID
+app.get('/v1/controle-jogos/jogo-genero/:id', cors(), async function (request, response) {
+    let id = request.params.id
+
+    let result = await controllerJogoGenero.buscarJogoGenero(id)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// Buscar generos de um jogo
+app.get('/v1/controle-jogos/jogo-genero/genero-por-jogo/:idJogo', cors(), async function (request, response) {
+    let idJogo = request.params.idJogo
+
+    let result = await controllerJogoGenero.buscarGeneroPorJogo(idJogo)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// Buscar jogos de um genero
+app.get('/v1/controle-jogos/jogo-genero/jogo-por-genero/:idGenero', cors(), async function (request, response) {
+    let idGenero = request.params.idGenero
+
+    let result = await controllerJogoGenero.buscarJogoPorGenero(idGenero)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+
 
 /***************************************************************************/
 
