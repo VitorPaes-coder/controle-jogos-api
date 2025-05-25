@@ -68,6 +68,7 @@ const deletePlataforma = async function (id) {
 
     } catch (error) {
         console.log(error)
+        return false
     }
 }
 
@@ -88,6 +89,7 @@ const selectAllPlataforma = async function () {
 
     } catch (error) {
         console.log(error)
+        return false
     }
 }
 
@@ -105,6 +107,7 @@ const selectByIdPlataforma = async function (id) {
 
     } catch (error) {
         console.log(error)
+        return false
     }
 }
 

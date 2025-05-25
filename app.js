@@ -493,7 +493,7 @@ app.put('/v1/controle-jogos/usuario/:id', cors(), bodyParserJSON, async function
     let dadosBody = request.body
 
     // Chama a função para atualizar o usuário
-    let resultUsuario = await controllerUsuario.atualizarUsuario(idUsuario, dadosBody, contentType)
+    let resultUsuario = await controllerUsuario.atualizarUsuario(dadosBody, idUsuario, contentType)
 
     response.status(resultUsuario.status_code)
     response.json(resultUsuario)

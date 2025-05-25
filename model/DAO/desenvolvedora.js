@@ -81,6 +81,7 @@ const deleteDesenvolvedora = async function (id) {
 
     } catch (error) {
         console.log(error)
+        return false
     }
 }
 
@@ -101,6 +102,7 @@ const selectAllDesenvolvedora = async function () {
 
     } catch (error) {
         console.log(error)
+        return false
     }
 }
 
@@ -118,6 +120,7 @@ const selectByIdDesenvolvedora = async function (id) {
 
     } catch (error) {
         console.log(error)
+        return false
     }
 }
 

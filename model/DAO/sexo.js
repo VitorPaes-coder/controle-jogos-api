@@ -78,6 +78,7 @@ const deleteSexo = async function (id) {
 
     } catch (error) {
         console.log(error)
+        return false
     }
 }
 
@@ -98,6 +99,7 @@ const selectAllSexo = async function () {
 
     } catch (error) {
         console.log(error)
+        return false
     }
 }
 
@@ -115,6 +117,7 @@ const selectByIdSexo = async function (id) {
 
     } catch (error) {
         console.log(error)
+        return false
     }
 }
 

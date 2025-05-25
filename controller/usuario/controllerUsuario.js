@@ -53,7 +53,7 @@ const inserirUsuario = async function(usuario, contentType){
 }
 
 //Função para tratar a atualização de um usuario no DAO
-const atualizarUsuario = async function(id, usuario, contentType){
+const atualizarUsuario = async function(usuario, id, contentType){
     try {
         if(String(contentType).toLowerCase() == 'application/json')
             {

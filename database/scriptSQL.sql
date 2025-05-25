@@ -81,7 +81,6 @@ create table tbl_avaliacao (
     data date not null,
     comentario text,
     nota int not null,
-    id_pontuacao int not null,
     id_usuario int not null,
     id_jogo int not null,
     
@@ -133,7 +132,7 @@ create table tbl_pais_desenvolvedora (
     references tbl_pais(id_pais)
 );
 
-desc tbl_pais;
+-- desc tbl_pais;
 -- show tables;
 -- alter table tbl_desenvolvedora add logo varchar(250);
 -- alter table tbl_avaliacao add nota INT NOT NULL;

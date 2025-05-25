@@ -61,7 +61,6 @@ const updateGenero = async function(genero) {
            return false
 
     } catch (error) {
-
        return false
     }
 

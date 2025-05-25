@@ -66,7 +66,7 @@ const updateUsuario = async function (usuario) {
                                             foto_perfil       = '${usuario.foto_perfil}',
                                             id_sexo           = '${usuario.id_sexo}',
                                             id_pais           = '${usuario.id_pais}'
-                    where id = ${usuario.id}`
+                    where id_usuario = ${usuario.id}`
 
         //execute é usado quado não é necessário retornar nada ao dados do banco
         let result = await prisma.$executeRawUnsafe(SQL)
@@ -77,7 +77,7 @@ const updateUsuario = async function (usuario) {
             return false
 
     } catch (error) {
-
+        console.log(error);
         return false
     }
 
@@ -96,6 +96,7 @@ const deleteUsuario = async function (id) {
             return false
     } catch (error) {
         console.log(error)
+        return false
     }
 }
 
@@ -114,7 +115,8 @@ const selectAllUsuario = async function () {
         else
             return false
     } catch (error) {
-
+        console.log(error)
+        return false
     }
 }
 
@@ -131,9 +133,14 @@ const selectByIdUsuario = async function (id) {
             return false
     } catch (error) {
         console.log(error)
+        return false
     }
 }
 
 module.exports = {
-    insertUsuario, updateUsuario, deleteUsuario, selectAllUsuario, selectByIdUsuario
+    insertUsuario, 
+    updateUsuario, 
+    deleteUsuario, 
+    selectAllUsuario,
+    selectByIdUsuario
 }
