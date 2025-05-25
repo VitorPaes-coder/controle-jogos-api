@@ -78,7 +78,7 @@ create table tbl_usuario (
 
 create table tbl_avaliacao (
     id_avaliacao int not null primary key auto_increment,
-    data date not null,
+    data_hora timestamp default current_timestamp,
     comentario text,
     nota int not null,
     id_usuario int not null,

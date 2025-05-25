@@ -34,6 +34,7 @@ const controllerPlataforma = require('./controller/plataforma/controllerPlatafor
 const controllerSexo = require('./controller/sexo/controllerSexo.js')
 const controllerPais = require('./controller/pais/controllerPais.js')
 const controllerUsuario = require('./controller/usuario/controllerUsuario.js')
+const controllerAvaliacao = require('./controller/avaliacao/controllerAvaliacao.js')
 
 // Estabelecendo o formato de dados que deverá chegar no body da requisição(POST ou PUT)
 const bodyParserJSON = bodyParser.json()
@@ -497,6 +498,59 @@ app.put('/v1/controle-jogos/usuario/:id', cors(), bodyParserJSON, async function
 
     response.status(resultUsuario.status_code)
     response.json(resultUsuario)
+})
+
+/*************************************AVALIACAO********************************************/
+
+// Inserir uma avaliação
+app.post('/v1/controle-jogos/avaliacao', cors(), bodyParserJSON, async function (request, response) {
+    let contentType = request.headers['content-type']
+    let dadosBody = request.body
+
+    let resultAvaliacao = await controllerAvaliacao.inserirAvaliacao(dadosBody, contentType)
+
+    response.status(resultAvaliacao.status_code)
+    response.json(resultAvaliacao)
+})
+
+// Atualizar uma avaliação
+app.put('/v1/controle-jogos/avaliacao/:id', cors(), bodyParserJSON, async function (request, response) {
+    let contentType = request.headers['content-type']
+    let idAvaliacao = request.params.id
+    let dadosBody = request.body
+
+    let resultAvaliacao = await controllerAvaliacao.atualizarAvaliacao(dadosBody, idAvaliacao, contentType)
+
+    response.status(resultAvaliacao.status_code)
+    response.json(resultAvaliacao)
+})
+
+// Deletar uma avaliação
+app.delete('/v1/controle-jogos/avaliacao/:id', cors(), async function (request, response) {
+    let idAvaliacao = request.params.id
+
+    let resultAvaliacao = await controllerAvaliacao.excluirAvaliacao(idAvaliacao)
+
+    response.status(resultAvaliacao.status_code)
+    response.json(resultAvaliacao)
+})
+
+// Listar todas as avaliações
+app.get('/v1/controle-jogos/avaliacao', cors(), async function (request, response) {
+    let resultAvaliacao = await controllerAvaliacao.listarAvaliacao()
+
+    response.status(resultAvaliacao.status_code)
+    response.json(resultAvaliacao)
+})
+
+// Buscar avaliação por ID
+app.get('/v1/controle-jogos/avaliacao/:id', cors(), async function (request, response) {
+    let idAvaliacao = request.params.id
+
+    let resultAvaliacao = await controllerAvaliacao.buscarAvaliacao(idAvaliacao)
+
+    response.status(resultAvaliacao.status_code)
+    response.json(resultAvaliacao)
 })
 
 /***************************************************************************/

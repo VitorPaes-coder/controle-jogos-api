@@ -65,7 +65,8 @@ const updateUsuario = async function (usuario) {
                                             biografia         = '${usuario.biografia}',
                                             foto_perfil       = '${usuario.foto_perfil}',
                                             id_sexo           = '${usuario.id_sexo}',
-                                            id_pais           = '${usuario.id_pais}'
+                                            id_pais
+                                                       = '${usuario.id_pais}'
                     where id_usuario = ${usuario.id}`
 
         //execute é usado quado não é necessário retornar nada ao dados do banco

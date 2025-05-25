@@ -16,8 +16,7 @@ const insertAvaliacao = async function (avaliacao) {
     try {
 
         let sql = `insert into tbl_avaliacao (
-
-                                        data, 
+ 
                                         comentario, 
                                         nota,
                                         id_usuario,
@@ -25,7 +24,6 @@ const insertAvaliacao = async function (avaliacao) {
 
                                         ) values (
 
-                                            '${avaliacao.data}',
                                             '${avaliacao.comentario}',
                                             '${avaliacao.nota}',
                                             '${avaliacao.id_usuario}',
@@ -52,13 +50,12 @@ const updateAvaliacao = async function (avaliacao) {
 
         let SQL = `update tbl_avaliacao set 
 
-                                        data = '${avaliacao.data}', 
                                         comentario = '${avaliacao.comentario}', 
                                         nota = '${avaliacao.nota}',
                                         id_usuario = '${avaliacao.id_usuario}',
                                         id_jogo = '${avaliacao.id_jogo}'
 
-                    where id = ${avaliacao.id}`
+                    where id_avaliacao = ${avaliacao.id}`
 
         //execute é usado quando não é necessário retornar nada ao dados do banco
         let result = await prisma.$executeRawUnsafe(SQL)
