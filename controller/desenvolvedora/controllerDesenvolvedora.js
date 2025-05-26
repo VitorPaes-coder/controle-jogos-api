@@ -11,6 +11,9 @@ const MESSAGE = require('../../modulo/config.js')
 // Import do DAO para realizar o CRUD no banco de dados
 const desenvolvedoraDAO = require('../../model/DAO/desenvolvedora.js')
 
+// Import do controller de pais desenvolvedora
+const controllerPaisDesenvolvedora = require('../pais-desenvolvedora/controllerPaisDesenvolvedora.js')
+
 // Função para inserir uma nova desenvolvedora
 const inserirDesenvolvedora = async function(desenvolvedora, contentType) {
     try {
@@ -18,7 +21,8 @@ const inserirDesenvolvedora = async function(desenvolvedora, contentType) {
             if (
 
                 desenvolvedora.nome      == undefined || desenvolvedora.nome == '' || desenvolvedora.nome == null || desenvolvedora.nome.length > 100 ||
-                desenvolvedora.descricao == undefined
+                desenvolvedora.descricao == undefined ||
+                desenvolvedora.logo      == undefined
 
             ) {
                 return { status_code: 400, message: MESSAGE.ERROR_REQUIRED_FIELDS }
@@ -46,7 +50,8 @@ const atualizarDesenvolvedora = async function(desenvolvedora, id, contentType) 
             if (
 
                 desenvolvedora.nome      == undefined || desenvolvedora.nome == '' || desenvolvedora.nome == null || desenvolvedora.nome.length > 100 ||
-                desenvolvedora.descricao == undefined
+                desenvolvedora.descricao == undefined ||
+                desenvolvedora.logo      == undefined
 
             ) {
                 return { status_code: 400, message: MESSAGE.ERROR_REQUIRED_FIELDS }
@@ -150,13 +155,16 @@ const buscarDesenvolvedora = async function(id) {
 
         if (resultDesenvolvedora != false || typeof resultDesenvolvedora == 'object') {
             if (resultDesenvolvedora.length > 0) {
+
                 for (let itemDesenvolvedora of resultDesenvolvedora) {
                     let dadosPais = await controllerPaisDesenvolvedora.buscarPaisPorDesenvolvedora(itemDesenvolvedora.id_desenvolvedora)
                     itemDesenvolvedora.paises = dadosPais.paises
                 }
+
                 dadosDesenvolvedoras.status = true
                 dadosDesenvolvedoras.status_code = 200
                 dadosDesenvolvedoras.data = resultDesenvolvedora
+
                 return dadosDesenvolvedoras
             } else {
                 return MESSAGE.ERROR_NOT_FOUND

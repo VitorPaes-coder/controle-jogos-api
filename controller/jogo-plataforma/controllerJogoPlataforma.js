@@ -36,7 +36,7 @@ const inserirJogoPlataforma = async function(jogoPlataforma, contentType){
 }
 
 // Função para atualizar um jogo_plataforma existente
-const atualizarJogoPlataforma = async function(id, jogoPlataforma, contentType){
+const atualizarJogoPlataforma = async function(jogoPlataforma, id, contentType){
     try {
         if(String(contentType).toLowerCase() == 'application/json') {
             if (

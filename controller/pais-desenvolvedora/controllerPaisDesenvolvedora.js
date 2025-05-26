@@ -36,7 +36,7 @@ const inserirPaisDesenvolvedora = async function(paisDesenvolvedora, contentType
 }
 
 // Função para atualizar um pais_desenvolvedora existente
-const atualizarPaisDesenvolvedora = async function(id, paisDesenvolvedora, contentType){
+const atualizarPaisDesenvolvedora = async function( paisDesenvolvedora, id, contentType){
     try {
         if(String(contentType).toLowerCase() == 'application/json') {
             if (
@@ -46,15 +46,20 @@ const atualizarPaisDesenvolvedora = async function(id, paisDesenvolvedora, conte
             ) {
                 return MESSAGE.ERROR_REQUIRED_FIELDS
             } else {
+                
                 let resultPaisDesenvolvedora = await paisDesenvolvedoraDAO.selectByIdPaisDesenvolvedora(parseInt(id))
+
                 if(resultPaisDesenvolvedora != false || typeof(resultPaisDesenvolvedora) == 'object'){
                     if(resultPaisDesenvolvedora.length > 0){
+
                         paisDesenvolvedora.id = parseInt(id)
                         let result = await paisDesenvolvedoraDAO.updatePaisDesenvolvedora(paisDesenvolvedora)
+
                         if(result)
                             return MESSAGE.SUCESS_UPDATED_ITEM
                         else
                             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
+
                     } else {
                         return MESSAGE.ERROR_NOT_FOUND
                     }

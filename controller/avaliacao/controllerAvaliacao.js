@@ -154,8 +154,8 @@ const listarAvaliacao = async function(){
                         let dadosUsuario = await controllerUsuario.buscarUsuario(itemAvaliacao.id_usuario)
                         let dadosJogo = await controllerJogo.buscarJogo(itemAvaliacao.id_jogo)
                         
-                        itemAvaliacao.usuario = dadosUsuario.usuario
-                        itemAvaliacao.jogo = dadosJogo.jogo
+                        itemAvaliacao.usuario = dadosUsuario.data
+                        itemAvaliacao.jogo = dadosJogo.data
 
                         delete itemAvaliacao.id_usuario
                         delete itemAvaliacao.id_jogo
@@ -204,8 +204,8 @@ const buscarAvaliacao = async function(id){
                         let dadosJogo = await controllerJogo.buscarJogo(itemAvaliacao.id_jogo)
                         
                         //Adicionando um atributo "usuario" no JSON de avaliacaos
-                        itemAvaliacao.usuario = dadosUsuario.usuario
-                        itemAvaliacao.jogo = dadosJogo.jogo
+                        itemAvaliacao.usuario = dadosUsuario.data
+                        itemAvaliacao.jogo = dadosJogo.data
                         //Remove o atributo id_usuario do JSON de avaliacaos, pois já temos
                         //o ID dentro dos dados da classificação
                         delete itemAvaliacao.id_usuario

@@ -128,7 +128,7 @@ const listarJogo = async function() {
                 for (let itemJogo of resultJogo) {
                     // Adiciona os dados de gênero ao jogo
                     let dadosGenero = await controllerJogoGenero.buscarGeneroPorJogo(itemJogo.id)
-                    itemJogo.genero = dadosGenero.data
+                    itemJogo.genero = dadosGenero.genero
 
                     // Adiciona as plataformas ao jogo
                     let dadosPlataforma = await controllerJogoPlataforma.buscarPlataformaPorJogo(itemJogo.id)
@@ -136,7 +136,7 @@ const listarJogo = async function() {
 
                     // Adiciona as desenvolvedoras ao jogo
                     let dadosDesenvolvedora = await controllerJogoDesenvolvedora.buscarDesenvolvedoraPorJogo(itemJogo.id)
-                    itemJogo.desenvolvedoras = dadosDesenvolvedora.desenvolvedora
+                    itemJogo.desenvolvedora = dadosDesenvolvedora.desenvolvedora
 
                     arrayJogos.push(itemJogo)
                 }
@@ -169,8 +169,10 @@ const buscarJogo = async function(id) {
             if (resultJogo.length > 0) {
                 // Adiciona os dados de gênero ao jogo
                 for (let itemJogo of resultJogo) {
+
+                    // Adiciona os dados de gênero ao jogo
                     let dadosGenero = await controllerJogoGenero.buscarGeneroPorJogo(itemJogo.id)
-                    itemJogo.genero = dadosGenero.data
+                    itemJogo.genero = dadosGenero.genero
 
                     // Adiciona as plataformas ao jogo
                     let dadosPlataforma = await controllerJogoPlataforma.buscarPlataformaPorJogo(itemJogo.id)

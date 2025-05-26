@@ -36,6 +36,9 @@ const controllerPais = require('./controller/pais/controllerPais.js')
 const controllerUsuario = require('./controller/usuario/controllerUsuario.js')
 const controllerAvaliacao = require('./controller/avaliacao/controllerAvaliacao.js')
 const controllerJogoGenero = require('./controller/jogo-genero/controllerJogoGenero.js')
+const controllerJogoPlataforma = require('./controller/jogo-plataforma/controllerJogoPlataforma.js')
+const controllerJogoDesenvolvedora = require('./controller/jogo-desenvolvedora/controllerJogoDesenvolvedora.js')
+const controllerPaisDesenvolvedora = require('./controller/pais-desenvolvedora/controllerPaisDesenvolvedora.js')
 
 // Estabelecendo o formato de dados que deverá chegar no body da requisição(POST ou PUT)
 const bodyParserJSON = bodyParser.json()
@@ -647,7 +650,228 @@ app.get('/v1/controle-jogos/jogo-genero/jogo-por-genero/:idGenero', cors(), asyn
 
 
 
-/***************************************************************************/
+/*************************************JOGO-PLATAFORMA***************************************/
+
+// Inserir um novo jogo-plataforma
+app.post('/v1/controle-jogos/jogo-plataforma', cors(), bodyParserJSON, async function (request, response) {
+    let contentType = request.headers['content-type']
+    let dadosBody = request.body
+
+    let result = await controllerJogoPlataforma.inserirJogoPlataforma(dadosBody, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// Atualizar um jogo-plataforma
+app.put('/v1/controle-jogos/jogo-plataforma/:id', cors(), bodyParserJSON, async function (request, response) {
+    let contentType = request.headers['content-type']
+    let id = request.params.id
+    let dadosBody = request.body
+
+    let result = await controllerJogoPlataforma.atualizarJogoPlataforma(dadosBody, id, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// Excluir um jogo-plataforma
+app.delete('/v1/controle-jogos/jogo-plataforma/:id', cors(), async function (request, response) {
+    let id = request.params.id
+
+    let result = await controllerJogoPlataforma.excluirJogoPlataforma(id)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// Listar todos os jogo-plataforma
+app.get('/v1/controle-jogos/jogo-plataforma', cors(), async function (request, response) {
+    let result = await controllerJogoPlataforma.listarJogoPlataforma()
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// Buscar um jogo-plataforma pelo ID
+app.get('/v1/controle-jogos/jogo-plataforma/:id', cors(), async function (request, response) {
+    let id = request.params.id
+
+    let result = await controllerJogoPlataforma.buscarJogoPlataforma(id)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// Buscar plataformas de um jogo
+app.get('/v1/controle-jogos/jogo-plataforma/plataforma-por-jogo/:idJogo', cors(), async function (request, response) {
+    let idJogo = request.params.idJogo
+
+    let result = await controllerJogoPlataforma.buscarPlataformaPorJogo(idJogo)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// Buscar jogos de uma plataforma
+app.get('/v1/controle-jogos/jogo-plataforma/jogo-por-plataforma/:idPlataforma', cors(), async function (request, response) {
+    let idPlataforma = request.params.idPlataforma
+
+    let result = await controllerJogoPlataforma.buscarJogoPorPlataforma(idPlataforma)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+
+
+/*************************************JOGO-DESENVOLVEDORA***************************************/
+
+// Inserir um novo jogo-desenvolvedora
+app.post('/v1/controle-jogos/jogo-desenvolvedora', cors(), bodyParserJSON, async function (request, response) {
+    let contentType = request.headers['content-type']
+    let dadosBody = request.body
+    let result = await controllerJogoDesenvolvedora.inserirJogoDesenvolvedora(dadosBody, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// Atualizar um jogo-desenvolvedora
+app.put('/v1/controle-jogos/jogo-desenvolvedora/:id', cors(), bodyParserJSON, async function (request, response) {
+    let contentType = request.headers['content-type']
+    let id = request.params.id
+    let dadosBody = request.body
+    let result = await controllerJogoDesenvolvedora.atualizarJogoDesenvolvedora(id, dadosBody, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// Excluir um jogo-desenvolvedora
+app.delete('/v1/controle-jogos/jogo-desenvolvedora/:id', cors(), async function (request, response) {
+    let id = request.params.id
+    let result = await controllerJogoDesenvolvedora.excluirJogoDesenvolvedora(id)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// Listar todos os jogo-desenvolvedora
+app.get('/v1/controle-jogos/jogo-desenvolvedora', cors(), async function (request, response) {
+    let result = await controllerJogoDesenvolvedora.listarJogoDesenvolvedora()
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// Buscar um jogo-desenvolvedora pelo ID
+app.get('/v1/controle-jogos/jogo-desenvolvedora/:id', cors(), async function (request, response) {
+    let id = request.params.id
+
+    let result = await controllerJogoDesenvolvedora.buscarJogoDesenvolvedora(id)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// Buscar desenvolvedoras de um jogo
+app.get('/v1/controle-jogos/jogo-desenvolvedora/desenvolvedora-por-jogo/:idJogo', cors(), async function (request, response) {
+    let idJogo = request.params.idJogo
+
+    let result = await controllerJogoDesenvolvedora.buscarDesenvolvedoraPorJogo(idJogo)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// Buscar jogos de uma desenvolvedora
+app.get('/v1/controle-jogos/jogo-desenvolvedora/jogo-por-desenvolvedora/:idDesenvolvedora', cors(), async function (request, response) {
+    let idDesenvolvedora = request.params.idDesenvolvedora
+
+    let result = await controllerJogoDesenvolvedora.buscarJogoPorDesenvolvedora(idDesenvolvedora)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+
+
+/*************************************PAIS-DESENVOLVEDORA***************************************/
+
+// Inserir um novo pais-desenvolvedora
+app.post('/v1/controle-jogos/pais-desenvolvedora', cors(), bodyParserJSON, async function (request, response) {
+    let contentType = request.headers['content-type']
+    let dadosBody = request.body
+
+    let result = await controllerPaisDesenvolvedora.inserirPaisDesenvolvedora(dadosBody, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// Atualizar um pais-desenvolvedora
+app.put('/v1/controle-jogos/pais-desenvolvedora/:id', cors(), bodyParserJSON, async function (request, response) {
+    let contentType = request.headers['content-type']
+    let id = request.params.id
+    let dadosBody = request.body
+
+    let result = await controllerPaisDesenvolvedora.atualizarPaisDesenvolvedora(dadosBody, id, contentType)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// Excluir um pais-desenvolvedora
+app.delete('/v1/controle-jogos/pais-desenvolvedora/:id', cors(), async function (request, response) {
+    let id = request.params.id
+
+    let result = await controllerPaisDesenvolvedora.excluirPaisDesenvolvedora(id)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// Listar todos os pais-desenvolvedora
+app.get('/v1/controle-jogos/pais-desenvolvedora', cors(), async function (request, response) {
+    let result = await controllerPaisDesenvolvedora.listarPaisDesenvolvedora()
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// Buscar um pais-desenvolvedora pelo ID
+app.get('/v1/controle-jogos/pais-desenvolvedora/:id', cors(), async function (request, response) {
+    let id = request.params.id
+
+    let result = await controllerPaisDesenvolvedora.buscarPaisDesenvolvedora(id)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// Buscar países de uma desenvolvedora
+app.get('/v1/controle-jogos/pais-desenvolvedora/pais-por-desenvolvedora/:idDesenvolvedora', cors(), async function (request, response) {
+    let idDesenvolvedora = request.params.idDesenvolvedora
+
+    let result = await controllerPaisDesenvolvedora.buscarPaisPorDesenvolvedora(idDesenvolvedora)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+// Buscar desenvolvedoras de um país
+app.get('/v1/controle-jogos/pais-desenvolvedora/desenvolvedora-por-pais/:idPais', cors(), async function (request, response) {
+    let idPais = request.params.idPais
+
+    let result = await controllerPaisDesenvolvedora.buscarDesenvolvedoraPorPais(idPais)
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+
+// Importando o módulo do express
 
 app.listen(8080, function () {
     console.log('API aguardando requisições...')

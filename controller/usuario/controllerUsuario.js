@@ -18,10 +18,10 @@ const controllerPais   = require('../pais/controllerPais.js')
 //Função para tratar a inserção de um novo usuario no DAO
 const inserirUsuario = async function(usuario, contentType){
     try {
-        console.log("Dados recebidos:", usuario); // Adicione este log
         if(String(contentType).toLowerCase() == 'application/json')
         {
-                if (usuario.nome              == ''           || usuario.nome               == undefined    || usuario.nome            == null || usuario.nome.length > 20 ||
+                if (
+                    usuario.nome              == ''           || usuario.nome               == undefined    || usuario.nome            == null || usuario.nome.length > 20 ||
                     usuario.email             == ''           || usuario.email            == undefined    || usuario.email         == null || usuario.email.length > 80 ||
                     usuario.senha             == ''           || usuario.senha            == undefined    || usuario.senha         == null || usuario.senha.length > 20 ||
                     usuario.data_nascimento   == ''           || usuario.data_nascimento   == undefined    || usuario.data_nascimento == null || usuario.data_nascimento.length > 10 ||
@@ -164,8 +164,8 @@ const listarUsuario = async function(){
                         let dadosSexo = await controllerSexo.buscarSexo(itemUsuario.id_sexo)
                         let dadosPais = await controllerPais.buscarPais(itemUsuario.id_pais)
                         
-                        itemUsuario.sexo = dadosSexo.sexo
-                        itemUsuario.pais = dadosPais.pais
+                        itemUsuario.sexo = dadosSexo.data
+                        itemUsuario.pais = dadosPais.data
 
                         delete itemUsuario.id_sexo
                         delete itemUsuario.id_pais

@@ -24,7 +24,7 @@ const insertDesenvolvedora = async function (desenvolvedora) {
                                         ) values (
 
                                             '${desenvolvedora.nome}', 
-                                            '${desenvolvedora.descricao}'
+                                            '${desenvolvedora.descricao}',
                                             '${desenvolvedora.logo}'
 
                                         )`
